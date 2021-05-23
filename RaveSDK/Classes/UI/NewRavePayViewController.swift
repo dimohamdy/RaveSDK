@@ -509,7 +509,7 @@ public class NewRavePayViewController: UITableViewController {
         debitCardView.cardExpiry.delegate = self
          debitCardView.cardCVV.delegate = self
          debitCardView.cardPayButton.addTarget(self, action: #selector(cardPayButtonTapped), for: .touchUpInside)
-         debitCardView.cardPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+         debitCardView.cardPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
 
          saveCardContainer.useAnotherCardButton.addTarget(self, action: #selector(showDebitCardView), for: .touchUpInside)
         debitCardView.rememberCardCheck.addTarget(self, action: #selector(toggleSaveCardCheck), for: .touchUpInside)
@@ -569,7 +569,7 @@ public class NewRavePayViewController: UITableViewController {
         accountFormContainer.dobTextField.inputView = dp
         dp.addTarget(self, action: #selector(dobPickerValueChanged), for: .valueChanged)
 
-       accountFormContainer.accountPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+       accountFormContainer.accountPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
        accountFormContainer.accountPayButton.addTarget(self, action: #selector(accountPayButtonTapped), for: .touchUpInside)
 
         raveAccountClient.amount = self.amount
@@ -584,7 +584,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMpesaClient.transactionReference = RaveConfig.sharedConfig().transcationRef
 
         mpesaView.mpesaPayButton.layer.cornerRadius = 5
-        mpesaView.mpesaPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+        mpesaView.mpesaPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
         mpesaView.mpesaPayButton.addTarget(self, action: #selector(mpesaPayButtonTapped), for: .touchUpInside)
 
         raveMpesaClient.amount = self.amount
@@ -634,7 +634,7 @@ public class NewRavePayViewController: UITableViewController {
         mobileMoneyContentView.mobileMoneyVoucher.layer.cornerRadius = 5
 
         mobileMoneyContentView.mobileMoneyPay.layer.cornerRadius = 5
-        mobileMoneyContentView.mobileMoneyPay.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+        mobileMoneyContentView.mobileMoneyPay.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
         mobileMoneyContentView.mobileMoneyPay.addTarget(self, action: #selector(mobileMoneyPayAction), for: .touchUpInside)
 
         raveMobileMoney.amount = self.amount
@@ -646,7 +646,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyUganda.transactionReference = RaveConfig.sharedConfig().transcationRef
         mobileMoneyUgandaContentContainer.mobileMoneyUgandaPhone.layer.cornerRadius = 5
         mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton.layer.cornerRadius = 5
-        mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+        mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
         mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton.addTarget(self, action: #selector(mobileMoneyUgandaPayAction), for: .touchUpInside)
 
         raveMobileMoneyUganda.amount = self.amount
@@ -658,7 +658,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyZM.transactionReference = RaveConfig.sharedConfig().transcationRef
         mobileMoneyZMContentContainer.mobileMoneyPay.layer.cornerRadius = 5
         mobileMoneyZMContentContainer.mobileMoneyPay.layer.cornerRadius = 5
-        mobileMoneyZMContentContainer.mobileMoneyPay.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+        mobileMoneyZMContentContainer.mobileMoneyPay.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
         mobileMoneyZMContentContainer.mobileMoneyPay.addTarget(self, action: #selector(mobileMoneyZambiaPayAction), for: .touchUpInside)
 
          zambiaMobileMoneyPicker = UIPickerView()
@@ -681,7 +681,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyFR.transactionReference = RaveConfig.sharedConfig().transcationRef
         mobileMoneyFRContentContainer.mobileMoneyFRPayButton.layer.cornerRadius = 5
         mobileMoneyFRContentContainer.mobileMoneyFRPayButton.layer.cornerRadius = 5
-        mobileMoneyFRContentContainer.mobileMoneyFRPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+        mobileMoneyFRContentContainer.mobileMoneyFRPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
         mobileMoneyFRContentContainer.mobileMoneyFRPayButton.addTarget(self, action: #selector(mobileMoneyFrancoPayAction), for: .touchUpInside)
 
         raveMobileMoneyFR.amount = self.amount
@@ -693,7 +693,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyRW.transactionReference = RaveConfig.sharedConfig().transcationRef
         mobileMoneyRWContentContainer.mobileMoneyRWPayButton.layer.cornerRadius = 5
         mobileMoneyRWContentContainer.mobileMoneyRWPayButton.layer.cornerRadius = 5
-        mobileMoneyRWContentContainer.mobileMoneyRWPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
+        mobileMoneyRWContentContainer.mobileMoneyRWPayButton.setTitle("Pay \(self.amount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) ?? "")", for: .normal)
         mobileMoneyRWContentContainer.mobileMoneyRWPayButton.addTarget(self, action: #selector(mobileMoneyRwandaPayAction), for: .touchUpInside)
         raveMobileMoneyRW.amount = self.amount
         raveMobileMoneyRW.email = RaveConfig.sharedConfig().email
@@ -701,7 +701,7 @@ public class NewRavePayViewController: UITableViewController {
     }
     @objc func chargeGBPAccountFlow() {
         self.view.endEditing(true)
-        if RaveConfig.sharedConfig().currencyCode == .some("GBP") {
+        if RaveConfig.sharedConfig().currencyCode == .some(.GBP) {
             LoadingHUD.shared().show()
             raveUKAccountClient.amount = self.amount
             raveUKAccountClient.accountNumber = "00000"
@@ -712,7 +712,7 @@ public class NewRavePayViewController: UITableViewController {
     }
     @objc func completeGBPAccountFlow() {
            self.view.endEditing(true)
-           if RaveConfig.sharedConfig().currencyCode == .some("GBP") {
+           if RaveConfig.sharedConfig().currencyCode == .some(.GBP) {
                LoadingHUD.shared().show()
                raveUKAccountClient.queryTransaction(txRef: raveUKAccountClient.txRef)
            }
@@ -891,21 +891,21 @@ public class NewRavePayViewController: UITableViewController {
         case 1:
             return  65
         case 2:
-            return RaveConfig.sharedConfig().currencyCode == "NGN" || RaveConfig.sharedConfig().currencyCode == "USD" || RaveConfig.sharedConfig().currencyCode == "ZAR" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .NGN || RaveConfig.sharedConfig().currencyCode == .USD || RaveConfig.sharedConfig().currencyCode == .ZAR ? 65 : 0
         case 3:
-            return RaveConfig.sharedConfig().currencyCode == "KES" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .KES ? 65 : 0
         case 4:
-            return RaveConfig.sharedConfig().currencyCode == "GHS" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .GHS ? 65 : 0
         case 5:
-            return RaveConfig.sharedConfig().currencyCode == "UGX" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .UGX ? 65 : 0
         case 6:
-            return RaveConfig.sharedConfig().currencyCode == "RWF" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .RWF ? 65 : 0
         case 7:
             return 0
         case 8:
-            return RaveConfig.sharedConfig().currencyCode == "ZMW" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .ZMW ? 65 : 0
         case 9:
-            return RaveConfig.sharedConfig().currencyCode == "GBP" ? 65 : 0
+            return RaveConfig.sharedConfig().currencyCode == .GBP ? 65 : 0
         default:
             return 0
         }
@@ -1155,7 +1155,7 @@ public class NewRavePayViewController: UITableViewController {
               raveUKAccountClient.feeSuccess = {[weak self](fee, chargeAmount) in
                   if let amount = chargeAmount, amount != "" {
                       DispatchQueue.main.async {
-                       self?.ukViewContainer.accountPayButton.setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                       self?.ukViewContainer.accountPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                       }
                   }
               }
@@ -1214,7 +1214,7 @@ public class NewRavePayViewController: UITableViewController {
         ukDetailsViewContainer.isHidden = false
         ukDetailsViewContainer.alpha = 0
 
-        ukDetailsViewContainer.amountValue.text = raveUKAccountClient.chargeAmount?.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode)
+        ukDetailsViewContainer.amountValue.text = raveUKAccountClient.chargeAmount?.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode)
         ukDetailsViewContainer.accountNumberValue.text = "43271228"
         ukDetailsViewContainer.sortCodeValue.text = "04-00-53"
         ukDetailsViewContainer.referenceNumberValue.text = reference
@@ -1253,7 +1253,7 @@ public class NewRavePayViewController: UITableViewController {
         raveAccountClient.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.accountFormContainer.accountPayButton.setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.accountFormContainer.accountPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1319,7 +1319,7 @@ public class NewRavePayViewController: UITableViewController {
         raveCardClient.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.debitCardView.cardPayButton.setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.debitCardView.cardPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1391,7 +1391,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMpesaClient.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.mpesaView.mpesaPayButton.setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.mpesaView.mpesaPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1464,7 +1464,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyZM.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.mobileMoneyZMContentContainer.mobileMoneyPay.setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.mobileMoneyZMContentContainer.mobileMoneyPay.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1509,7 +1509,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyFR.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.mobileMoneyFRContentContainer.mobileMoneyFRPayButton .setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.mobileMoneyFRContentContainer.mobileMoneyFRPayButton .setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1555,7 +1555,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyRW.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.mobileMoneyRWContentContainer.mobileMoneyRWPayButton .setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.mobileMoneyRWContentContainer.mobileMoneyRWPayButton .setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1600,7 +1600,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoneyUganda.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton .setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton .setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
@@ -1734,7 +1734,7 @@ public class NewRavePayViewController: UITableViewController {
         raveMobileMoney.feeSuccess = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
-                    self?.mobileMoneyContentView.mobileMoneyPay.setTitle("Pay \(amount.toCountryCurrency(code: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
+                    self?.mobileMoneyContentView.mobileMoneyPay.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }

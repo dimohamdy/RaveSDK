@@ -34,7 +34,7 @@ public class RaveMpesaClient {
             let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
-                "currency": RaveConfig.sharedConfig().currencyCode,
+                "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "ptype": "3"]
             RavePayService.getFee(param, resultCallback: { (result) in
                 let data = result?["data"] as? [String: AnyObject]
@@ -61,7 +61,7 @@ public class RaveMpesaClient {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
            var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case "KES", "TZS", "GHS", "KES", "ZAR":
+            case .KES, .TZS, .GHS, .ZAR:
                            country = RaveConfig.sharedConfig().country
                        default:
                            country = "NG"

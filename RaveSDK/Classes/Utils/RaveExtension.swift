@@ -124,21 +124,21 @@ extension String {
     func containsIgnoringCase(find: String) -> Bool {
         return self.range(of: find, options: .caseInsensitive) != nil
     }
-    func getLocale(code: String) -> Locale {
-        switch code {
-        case "NGN":
+    func getLocale(currencyCode: CurrencyCode) -> Locale {
+        switch currencyCode {
+        case .NGN:
             return Locale(identifier: "ig_Ng")
-        case "USD":
+        case .USD:
             return Locale(identifier: "en_US")
-        case "GBP":
+        case .GBP:
             return Locale(identifier: "en_GB")
-        case "KES":
+        case .KES:
             return Locale(identifier: "kam_KE")
-        case "GHS":
+        case .GHS:
             return Locale(identifier: "ak_GH")
-        case "ZAR":
+        case .ZAR:
             return Locale(identifier: "en_ZA")
-        case "UGX":
+        case .UGX:
             return Locale(identifier: "nyn_UG")
         default:
             let locales: [String] = NSLocale.availableLocaleIdentifiers
@@ -148,7 +148,7 @@ extension String {
 
             let current = loc.filter { (item) -> Bool in
                 if let it = item.currencyCode {
-                    return it == code
+                    return it == currencyCode.rawValue
                 } else {
                     return false
                 }
@@ -187,9 +187,9 @@ extension String {
             return nil
         }
     }
-    func toCountryCurrency(code: String, fraction: Int = 3) -> String {
+    func toCountryCurrency(currencyCode: CurrencyCode, fraction: Int = 3) -> String {
         var str: String = ""
-        str = self.toRaveCurrency(fraction, locale: getLocale(code: code))
+        str = self.toRaveCurrency(fraction, locale: getLocale(currencyCode: currencyCode))
         return str
     }
 

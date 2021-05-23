@@ -47,7 +47,7 @@ public class RaveAccountClient {
             let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
-                "currency": RaveConfig.sharedConfig().currencyCode,
+                "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "ptype": "2"]
             RavePayService.getFee(param, resultCallback: { (result) in
                 let data = result?["data"] as? [String: AnyObject]
@@ -112,7 +112,7 @@ public class RaveAccountClient {
             let isInternetBanking = (self.isInternetBanking) == true ? 1 : 0
             var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case "KES", "TZS", "GHS", "KES", "ZAR":
+                       case .KES, .TZS, .GHS, .KES, .ZAR:
                            country = RaveConfig.sharedConfig().country
                        default:
                            country = "NG"
@@ -171,7 +171,7 @@ public class RaveAccountClient {
             if isUSBankAccount {
              param.merge(["is_us_bank_charge": "\(isUSBankAccount)"])
             }
-            if RaveConfig.sharedConfig().currencyCode == "GBP"{
+            if RaveConfig.sharedConfig().currencyCode == .GBP {
                 param.merge(["is_uk_bank_charge2": 1, "accountname": accountNumber])
             }
 
@@ -216,7 +216,7 @@ public class RaveAccountClient {
                 if let status = res?["status"] as? String {
                     if status == "success"{
                         let result = res?["data"] as? [String: AnyObject]
-                        if RaveConfig.sharedConfig().currencyCode == "GBP"{
+                        if RaveConfig.sharedConfig().currencyCode == .GBP {
                             if let chargeResponse = result?["response_code"] as? String {
                                 switch chargeResponse {
                                 case "00":

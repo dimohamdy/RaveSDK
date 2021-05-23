@@ -10,11 +10,11 @@ import UIKit
 import RaveSDK
 
 class ViewController: UIViewController ,RavePayProtocol {
-    func tranasctionSuccessful(flwRef: String?, responseData: [String : Any]?) {
+    func transactionSuccessful(flwRef: String?, responseData: [String : Any]?) {
         print(responseData?.description ?? "Nothing here")
     }
 
-    func tranasctionFailed(flwRef: String?, responseData: [String : Any]?) {
+    func transactionFailed(flwRef: String?, responseData: [String : Any]?) {
         print(responseData?.description ?? "Nothing here")
     }
 
@@ -22,7 +22,7 @@ class ViewController: UIViewController ,RavePayProtocol {
     @IBAction func showAction(_ sender: Any) {
         let config = RaveConfig.sharedConfig()
         config.country = "NG" // Country Code
-        config.currencyCode = "NGN" // Currency
+        config.currencyCode = .NGN // Currency
         config.email = "test@email.com"
         config.isStaging = false // Toggle this for staging and live environment
         config.phoneNumber = "260967101211" //Phone number

@@ -13,6 +13,10 @@ public enum SuggestedAuthModel {
 public enum AuthModel {
     case OTP, WEB
 }
+public enum CurrencyCode: String {
+    case NGN, USD, ZAR, KES, GHS, UGX, RWF, ZMW, GBP, TZS, XAF, XOF
+}
+
 public class RaveConfig {
     public var publicKey: String?
     public var encryptionKey: String?
@@ -23,7 +27,7 @@ public class RaveConfig {
     public var phoneNumber: String?
     public var transcationRef: String?
     public var country: String = "NG"
-    public var currencyCode: String = "NGN"
+    public var currencyCode: CurrencyCode = .NGN
     public var narration: String?
     public var isPreAuth: Bool = false
     public var meta: [[String: String]]?

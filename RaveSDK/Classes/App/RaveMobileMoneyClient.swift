@@ -41,14 +41,14 @@ public class RaveMobileMoneyClient {
 
     // MARK: Get transaction Fee
     public func getFee() {
-        if RaveConfig.sharedConfig().currencyCode == "GHS" || RaveConfig.sharedConfig().currencyCode == "UGX"
-        || RaveConfig.sharedConfig().currencyCode == "RWF" || RaveConfig.sharedConfig().currencyCode == "XAF"
-            || RaveConfig.sharedConfig().currencyCode == "XOF" || RaveConfig.sharedConfig().currencyCode == "ZMW"{
+        if RaveConfig.sharedConfig().currencyCode == .GHS || RaveConfig.sharedConfig().currencyCode == .UGX
+            || RaveConfig.sharedConfig().currencyCode == .RWF || RaveConfig.sharedConfig().currencyCode == .XAF
+            || RaveConfig.sharedConfig().currencyCode == .XOF || RaveConfig.sharedConfig().currencyCode == .ZMW {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
             let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
-                "currency": RaveConfig.sharedConfig().currencyCode,
+                "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "ptype": "2"]
             RavePayService.getFee(param, resultCallback: { (result) in
                 let data = result?["data"] as? [String: AnyObject]
@@ -75,7 +75,7 @@ public class RaveMobileMoneyClient {
     public func chargeMobileMoney(_ type: MobileMoneyType = .ghana) {
         var country: String = ""
         switch RaveConfig.sharedConfig().currencyCode {
-                   case "KES", "TZS", "GHS", "KES", "ZAR":
+                   case .KES, .TZS, .GHS, .KES, .ZAR:
                        country = RaveConfig.sharedConfig().country
                    default:
                        country = "NG"
@@ -100,9 +100,9 @@ public class RaveMobileMoneyClient {
             case .ghana :
                 param.merge(["network": network ?? "", "is_mobile_money_gh": "1", "payment_type": "mobilemoneygh"])
             case .uganda :
-                param.merge(["network": "UGX", "is_mobile_money_ug": "1", "payment_type": "mobilemoneyuganda"])
+                param.merge(["network": CurrencyCode.UGX.rawValue, "is_mobile_money_ug": "1", "payment_type": "mobilemoneyuganda"])
             case .rwanda :
-                param.merge(["network": "RWF", "is_mobile_money_gh": "1", "payment_type": "mobilemoneygh"])
+                param.merge(["network": CurrencyCode.RWF.rawValue, "is_mobile_money_gh": "1", "payment_type": "mobilemoneygh"])
             case .zambia:
                 param.merge(["network": network ?? "", "is_mobile_money_ug": "1", "payment_type": "mobilemoneyzambia"])
             case .franco:
@@ -177,7 +177,7 @@ public class RaveMobileMoneyClient {
 
 										if let type =  result?["paymentType"] as? String, let currency = result?["currency"] as? String {
 											print(type)
-											if type.containsIgnoringCase(find: "mpesa") || type.containsIgnoringCase(find: "mobilemoneygh") || type.containsIgnoringCase(find: "mobilemoneyzm") ||  currency.containsIgnoringCase(find: "UGX") {
+                                            if type.containsIgnoringCase(find: "mpesa") || type.containsIgnoringCase(find: "mobilemoneygh") || type.containsIgnoringCase(find: "mobilemoneyzm") ||  currency.containsIgnoringCase(find: CurrencyCode.UGX.rawValue) {
 												if let status =  result?["status"] as? String {
 													if status.containsIgnoringCase(find: "pending") {
 

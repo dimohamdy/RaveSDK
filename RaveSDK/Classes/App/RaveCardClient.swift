@@ -64,7 +64,7 @@ public class RaveCardClient {
             let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
-                "currency": RaveConfig.sharedConfig().currencyCode,
+                "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "card6": cardfirst6!]
                 RavePayService.getFee(param, resultCallback: {[weak self] (result) in
                 guard let strongSelf = self else {return}
@@ -92,7 +92,7 @@ public class RaveCardClient {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
             var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case "KES", "TZS", "GHS", "KES", "ZAR":
+                       case .KES, .TZS, .GHS, .KES, .ZAR:
                            country = RaveConfig.sharedConfig().country
                        default:
                            country = "NG"
@@ -248,7 +248,7 @@ public class RaveCardClient {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
             var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case "KES", "TZS", "GHS", "KES", "ZAR":
+                       case .KES, .TZS, .GHS, .KES, .ZAR:
                            country = RaveConfig.sharedConfig().country
                        default:
                            country = "NG"

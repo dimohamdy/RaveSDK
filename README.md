@@ -49,7 +49,7 @@ pod 'RaveSDK'
      @IBAction func showAction(_ sender: Any) {
          let config = RaveConfig.sharedConfig()
          config.country = "NG" // Country Code
-         config.currencyCode = "NGN" // Currency
+         config.currencyCode = .NGN // Currency
          config.email = "[customer@email.com]" // Customer's email
          config.isStaging = false // Toggle this for staging and live environment
          config.phoneNumber = "[xxxxxxxxx]" //Phone number
