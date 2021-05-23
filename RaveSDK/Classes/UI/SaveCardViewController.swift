@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol CardSelect: class {
+protocol CardSelect: AnyObject {
     func cardSelected(card: SavedCard?)
 }
 

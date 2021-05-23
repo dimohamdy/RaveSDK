@@ -22,7 +22,7 @@ enum OTPType {
     case card, bank, savedCard
 }
 
-public protocol  RavePayProtocol: class {
+public protocol  RavePayProtocol: AnyObject {
     func transactionSuccessful(flwRef: String?, responseData: [String: Any]?)
     func transactionFailed(flwRef: String?, responseData: [String: Any]?)
 }

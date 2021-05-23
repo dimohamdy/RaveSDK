@@ -8,7 +8,7 @@
 
 import UIKit
 import WebKit
-protocol  RavePayWebProtocol: class {
+protocol  RavePayWebProtocol: AnyObject {
     func transactionSuccessful(flwRef: String, responseData: [String: Any]?)
 
 }
