@@ -11,26 +11,26 @@ import Foundation
 import CommonCrypto
 
 public class TripleDES {
-    static func encrypt(string:String, key:String) -> NSData? {
-        
+    static func encrypt(string: String, key: String) -> NSData? {
+
         let keyData: NSData! = (key as NSString).data(using: String.Encoding.utf8.rawValue) as! NSData
         let keyBytes         = keyData.bytes
-        
+
         let data: NSData! = (string as NSString).data(using: String.Encoding.utf8.rawValue) as! NSData
         let dataLength    = UInt(data.length)
         let dataBytes     = data.bytes
-        
+
         let cryptData    = NSMutableData(length: Int(dataLength) + kCCBlockSize3DES)!
         let cryptPointer = cryptData.mutableBytes
         let cryptLength  = size_t(cryptData.length)
-        
+
         let keyLength              = size_t(kCCKeySize3DES)
         let operation: CCOperation = UInt32(kCCEncrypt)
-        let algoritm:  CCAlgorithm = UInt32(kCCAlgorithm3DES)
-        let options:   CCOptions   = UInt32(kCCOptionPKCS7Padding+kCCOptionECBMode)
-        
-        var numBytesEncrypted :Int = 0
-        
+        let algoritm: CCAlgorithm = UInt32(kCCAlgorithm3DES)
+        let options: CCOptions   = UInt32(kCCOptionPKCS7Padding+kCCOptionECBMode)
+
+        var numBytesEncrypted: Int = 0
+
         let cryptStatus = CCCrypt(operation,
                                   algoritm,
                                   options,

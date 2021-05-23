@@ -19,7 +19,7 @@ class OTPView: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     lazy var otpTextField: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -30,7 +30,7 @@ class OTPView: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     lazy var otpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("CONFIRM OTP", for: .normal)
@@ -47,14 +47,14 @@ class OTPView: UIView {
         addSubview(otpButton)
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            otpMessage.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            otpMessage.topAnchor.constraint(equalTo: topAnchor, constant:20),
-            otpMessage.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            otpMessage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            otpMessage.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            otpMessage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             otpMessage.heightAnchor.constraint(equalToConstant: 55),
-            
+
             otpTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             otpTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             otpTextField.topAnchor.constraint(equalTo: otpMessage.bottomAnchor, constant: 35),
@@ -63,10 +63,10 @@ class OTPView: UIView {
            otpButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
            otpButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
            otpButton.topAnchor.constraint(equalTo: otpTextField.bottomAnchor, constant: 26),
-           otpButton.heightAnchor.constraint(equalToConstant: 50),
+           otpButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

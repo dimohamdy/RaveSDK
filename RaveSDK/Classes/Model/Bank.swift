@@ -8,9 +8,9 @@
 
 import UIKit
 public struct Bank: Codable {
-    var bankCode:String?
-    var isInternetBanking:Bool?
-    var name:String?
+    var bankCode: String?
+    var isInternetBanking: Bool?
+    var name: String?
 	public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         bankCode = try values.decodeIfPresent(String?.self, forKey: .bankCode) ?? nil
@@ -19,11 +19,10 @@ public struct Bank: Codable {
     }
 }
 
-extension Bank{
-    enum CodingKeys:String,CodingKey{
+extension Bank {
+    enum CodingKeys: String, CodingKey {
         case name = "bankname"
         case isInternetBanking = "internetbanking"
         case bankCode = "bankcode"
     }
 }
-

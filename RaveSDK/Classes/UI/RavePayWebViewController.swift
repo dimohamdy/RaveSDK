@@ -8,23 +8,23 @@
 
 import UIKit
 import WebKit
-protocol  RavePayWebProtocol : class{
-    func tranasctionSuccessful(flwRef:String,responseData:[String:Any]?)
-   
+protocol  RavePayWebProtocol: class {
+    func tranasctionSuccessful(flwRef: String, responseData: [String: Any]?)
+
 }
 
-class RavePayWebViewController: UIViewController, WKNavigationDelegate,WKUIDelegate {
+class RavePayWebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     var webView: WKWebView!
-    var url:String?
-    var flwRef:String?
+    var url: String?
+    var flwRef: String?
     var progressView: UIProgressView!
-    weak var delegate:RavePayWebProtocol?
+    weak var delegate: RavePayWebProtocol?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let _URL = url{
+
+        if let _URL = url {
             let ur = _URL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            if let _d = ur{
+            if let _d = ur {
                 let _url = URL(string: _d)
                 if let theURL = _url {
                     let request = URLRequest(url: theURL)
@@ -43,7 +43,7 @@ class RavePayWebViewController: UIViewController, WKNavigationDelegate,WKUIDeleg
 
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
     }
-   
+
     override func loadView() {
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
@@ -58,31 +58,28 @@ class RavePayWebViewController: UIViewController, WKNavigationDelegate,WKUIDeleg
         webView.navigationDelegate = self
         self.view = webView
     }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
             progressView.progress = Float(webView.estimatedProgress)
         }
     }
-    
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("doneLoading")
         self.navigationItem.title = webView.title
         print(webView.url!.absoluteString)
-        if (webView.url!.absoluteString.contains("/complete") || webView.url!.absoluteString.contains("submitting_mock_form")){
+        if webView.url!.absoluteString.contains("/complete") || webView.url!.absoluteString.contains("submitting_mock_form") {
             print("success page")
             self.delegate?.tranasctionSuccessful(flwRef: flwRef!, responseData: nil)
             self.progressView.removeFromSuperview()
             self.navigationController?.popViewController(animated: true)
         }
-        
+
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-
 
 }

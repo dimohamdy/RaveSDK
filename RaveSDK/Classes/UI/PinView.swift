@@ -9,7 +9,7 @@
 import UIKit
 
 class PinView: UIView {
-    
+
     lazy var titleInfo: UILabel = {
         let label = UILabel()
         label.text = "Please enter your 4-digit card\npin to authorize this payment"
@@ -19,8 +19,8 @@ class PinView: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
-    let pins:[UIView] = Array(1...4).map { (item) -> UIView in
+
+    let pins: [UIView] = Array(1...4).map { (_) -> UIView in
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -28,7 +28,7 @@ class PinView: UIView {
         view.backgroundColor = .white
         return view
     }
-    
+
     lazy var hiddenPinTextField: UITextField = {
         let text = UITextField()
         text.keyboardType = .numberPad
@@ -59,26 +59,26 @@ class PinView: UIView {
         addSubview(pinContinueButton)
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleInfo.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            titleInfo.topAnchor.constraint(equalTo: topAnchor, constant:20),
-            titleInfo.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            titleInfo.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleInfo.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleInfo.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             titleInfo.heightAnchor.constraint(equalToConstant: 55),
-            
+
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             stackView.topAnchor.constraint(equalTo: titleInfo.bottomAnchor, constant: 45),
-            
+
             pinContinueButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             pinContinueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             pinContinueButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-            pinContinueButton.heightAnchor.constraint(equalToConstant: 50),
+            pinContinueButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
 }

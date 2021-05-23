@@ -19,7 +19,7 @@ class MpesaPendingView: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     lazy var mpesaPendingNoNotification: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,24 +39,24 @@ class MpesaPendingView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
         stackView.addArrangedSubview(mpesaPendingLabel)
         stackView.addArrangedSubview(mpesaPendingNoNotification)
-        
+
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant:71),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 71),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

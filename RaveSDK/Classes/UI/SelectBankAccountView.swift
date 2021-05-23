@@ -1,4 +1,3 @@
-
 //
 //  SelectBankAccountView.swift
 //  RaveTest
@@ -19,7 +18,7 @@ class SelectBankAccountView: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     lazy var otherBanksTextField: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -29,30 +28,30 @@ class SelectBankAccountView: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
         addSubview(otherBanksTextField)
-      
+
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant:20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             titleLabel.heightAnchor.constraint(equalToConstant: 55),
-            
+
             otherBanksTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             otherBanksTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             otherBanksTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35),
-            otherBanksTextField.heightAnchor.constraint(equalToConstant: 57),
+            otherBanksTextField.heightAnchor.constraint(equalToConstant: 57)
 
             ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -19,7 +19,7 @@ class MobileMoneyZM: UIView {
            label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
            return label
        }()
-       
+
        lazy var mobileMoneyChooseNetwork: UITextField = {
            let text = UITextField()
            text.backgroundColor = .white
@@ -31,7 +31,7 @@ class MobileMoneyZM: UIView {
            text.translatesAutoresizingMaskIntoConstraints = false
            return text
        }()
-       
+
        lazy var mobileMoneyPhoneNumber: UITextField = {
            let text = UITextField()
            text.backgroundColor = .white
@@ -43,7 +43,7 @@ class MobileMoneyZM: UIView {
            text.translatesAutoresizingMaskIntoConstraints = false
            return text
        }()
-       
+
        lazy var mobileMoneyPay: UIButton = {
            let button = UIButton(type: .system)
            button.setTitle("PAY", for: .normal)
@@ -62,7 +62,7 @@ class MobileMoneyZM: UIView {
            stack.translatesAutoresizingMaskIntoConstraints = false
            return stack
        }()
-       
+
        override init(frame: CGRect) {
            super.init(frame: frame)
            addSubview(mobileMoneyTitle)
@@ -72,22 +72,21 @@ class MobileMoneyZM: UIView {
            stackView.addArrangedSubview(mobileMoneyPay)
            setupConstraints()
        }
-       
-       func setupConstraints(){
+
+       func setupConstraints() {
            NSLayoutConstraint.activate([
-               mobileMoneyTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-               mobileMoneyTitle.topAnchor.constraint(equalTo: topAnchor, constant:20),
-               mobileMoneyTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+               mobileMoneyTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+               mobileMoneyTitle.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+               mobileMoneyTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                mobileMoneyTitle.heightAnchor.constraint(equalToConstant: 55),
-               
+
                stackView.topAnchor.constraint(equalTo: mobileMoneyTitle.bottomAnchor, constant: 37),
-               stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-               stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
-               
-               
+               stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+               stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+
            ])
        }
-       
+
        required init?(coder aDecoder: NSCoder) {
            fatalError("init(coder:) has not been implemented")
        }

@@ -19,7 +19,7 @@ class MpesaView: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     lazy var mpesaPhoneNumber: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -30,7 +30,7 @@ class MpesaView: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     lazy var mpesaPayButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("PAY", for: .normal)
@@ -47,28 +47,28 @@ class MpesaView: UIView {
         addSubview(mpesaPayButton)
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant:20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             titleLabel.heightAnchor.constraint(equalToConstant: 55),
-            
+
             mpesaPhoneNumber.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             mpesaPhoneNumber.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mpesaPhoneNumber.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35),
             mpesaPhoneNumber.heightAnchor.constraint(equalToConstant: 57),
-            
+
             mpesaPayButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             mpesaPayButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mpesaPayButton.topAnchor.constraint(equalTo: mpesaPhoneNumber.bottomAnchor, constant: 26),
-            mpesaPayButton.heightAnchor.constraint(equalToConstant: 50),
+            mpesaPayButton.heightAnchor.constraint(equalToConstant: 50)
             ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
 }

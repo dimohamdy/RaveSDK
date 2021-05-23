@@ -11,34 +11,34 @@ import Alamofire
 
 class RaveConstants: NSObject {
 
-    class func baseURL () -> String{
+    class func baseURL () -> String {
         //return "https://ravesandbox.azurewebsites.net"
         return "https://rave-api-v2.herokuapp.com"
     }
-    class func liveBaseURL() -> String{
+    class func liveBaseURL() -> String {
        // return "https://raveapi.azurewebsites.net"
         return "https://api.ravepay.co"
-       
+
     }
-    class func v2liveBaseURL() -> String{
+    class func v2liveBaseURL() -> String {
         return "https://api.ravepay.co"
-        
+
     }
-   
-    static let bankStyle = [(code:"044",color:"#143f89",image:"rave_access2"),
-                     (code:"101",color:"#ffffff",image:"rave_providus2"),
-                     (code:"232",color:"#ad1620",image:"rave_sterling2"),
-                     (code:"057",color:"#ed3237",image:"rave_zenith2"),
-                     (code:"601",color:"#ffffff",image:"rave_fsdh"),
-                     (code:"076",color:"#ffffff",image:"rave_polaris"),
-                     (code:"214",color:"#5c3092",image:"rave_fcmb"),
-                     (code:"050",color:"#ffffff",image:"rave_ecobank"),
-                     (code:"011",color:"#143f89",image:"rave_firstbank"),
-                     (code:"058",color:"#ffffff",image:"rave_gtb"),
-                     (code:"215",color:"#FFFFFF",image:"rave_unity"),
-                     (code:"033",color:"#FFFFFF",image:"rave_uba")]
-    
-    static let ghsMobileNetworks = [("MTN","Please Dial *170#, click on Pay and wait for instructions on the next screen",
+
+    static let bankStyle = [(code:"044", color:"#143f89", image:"rave_access2"),
+                     (code:"101", color:"#ffffff", image:"rave_providus2"),
+                     (code:"232", color:"#ad1620", image:"rave_sterling2"),
+                     (code:"057", color:"#ed3237", image:"rave_zenith2"),
+                     (code:"601", color:"#ffffff", image:"rave_fsdh"),
+                     (code:"076", color:"#ffffff", image:"rave_polaris"),
+                     (code:"214", color:"#5c3092", image:"rave_fcmb"),
+                     (code:"050", color:"#ffffff", image:"rave_ecobank"),
+                     (code:"011", color:"#143f89", image:"rave_firstbank"),
+                     (code:"058", color:"#ffffff", image:"rave_gtb"),
+                     (code:"215", color:"#FFFFFF", image:"rave_unity"),
+                     (code:"033", color:"#FFFFFF", image:"rave_uba")]
+
+    static let ghsMobileNetworks = [("MTN", "Please Dial *170#, click on Pay and wait for instructions on the next screen",
                                      """
                                         Complete payment process
                                         1. Dial *170#
@@ -49,14 +49,14 @@ class RaveConstants: NSObject {
                                         6. Choose option 1 to approve
                                         7. Tap button to continue)
                                         """),
-                                    ("TIGO","Please Dial *501*5#, click on Pay and wait for instructions on the next screen",
+                                    ("TIGO", "Please Dial *501*5#, click on Pay and wait for instructions on the next screen",
                                      """
                                         Complete payment process
                                         1. Dial *501*5# to approve your transaction.
                                         2. Select the transaction to approve and click on send.
                                         3. Select YES to confirm your payment.
                                         """),
-                                    ("VODAFONE","Please Dial *110# and follow the instructions to generate your transaction voucher.",
+                                    ("VODAFONE", "Please Dial *110# and follow the instructions to generate your transaction voucher.",
                                      """
                                         Complete payment process
                                         1. Dial  *110# to generate your transaction voucher.
@@ -64,50 +64,45 @@ class RaveConstants: NSObject {
                                         3. Enter your PIN in next prompt.
                                         4. Input the voucher generated in the payment modal
                                         """),
-                                    ("AIRTEL","","")]
-    
+                                    ("AIRTEL", "", "")]
+
     static let zambianNetworks = ["MTN"]
-    
-    class func isConnectedToInternet() ->Bool {
+
+    class func isConnectedToInternet() -> Bool {
         return NetworkReachabilityManager()!.isReachable
     }
-   
- 
-    class func relativeURL()->Dictionary<String,String>{
+
+    class func relativeURL()->[String: String] {
         return [
-            "CHARGE_CARD" :"/flwv3-pug/getpaidx/api/charge",
-            "VALIDATE_CARD_OTP" :"/flwv3-pug/getpaidx/api/validatecharge",
-            "VALIDATE_ACCOUNT_OTP":"/flwv3-pug/getpaidx/api/validate",
-            "BANK_LIST":"/flwv3-pug/getpaidx/api/flwpbf-banks.js?json=1",
-            "CHARGE_WITH_TOKEN":"/flwv3-pug/getpaidx/api/tokenized/charge",
-            "QUERY_TRANSACTION":"/flwv3-pug/getpaidx/api/v2/verify",
-            "MPESA_QUERY_TRANSACTION":"/flwv3-pug/getpaidx/api/verify/mpesa",
-            "FEE":"/flwv3-pug/getpaidx/api/fee",
-            "SAVE_CARD_LOOKUP":"/v2/gpx/users/lookup",
-            "SEND_SAVEDCARD_OTP":"/v2/gpx/users/send_otp",
-            "REMOVE_SAVEDCARD":"/v2/gpx/users/remove"
+            "CHARGE_CARD": "/flwv3-pug/getpaidx/api/charge",
+            "VALIDATE_CARD_OTP": "/flwv3-pug/getpaidx/api/validatecharge",
+            "VALIDATE_ACCOUNT_OTP": "/flwv3-pug/getpaidx/api/validate",
+            "BANK_LIST": "/flwv3-pug/getpaidx/api/flwpbf-banks.js?json=1",
+            "CHARGE_WITH_TOKEN": "/flwv3-pug/getpaidx/api/tokenized/charge",
+            "QUERY_TRANSACTION": "/flwv3-pug/getpaidx/api/v2/verify",
+            "MPESA_QUERY_TRANSACTION": "/flwv3-pug/getpaidx/api/verify/mpesa",
+            "FEE": "/flwv3-pug/getpaidx/api/fee",
+            "SAVE_CARD_LOOKUP": "/v2/gpx/users/lookup",
+            "SEND_SAVEDCARD_OTP": "/v2/gpx/users/send_otp",
+            "REMOVE_SAVEDCARD": "/v2/gpx/users/remove"
         ]
     }
-    
-   
-    class func headerConstants(_ headerParam:Dictionary<String,String>)->Dictionary<String,String> {
-     
+
+    class func headerConstants(_ headerParam: [String: String])->[String: String] {
+
        /* var defaultsDict:Dictionary<String,String>  =  [
             "apikey":apiKey,
             "secret": apiSecret]*/
-      
-        
+
 //        if(headerParam.isEmpty){
 //            return defaultsDict
 //        }else{
 //            defaultsDict.merge(headerParam)
 //            return defaultsDict
 //        }
-        
+
        return  headerParam
 
     }
-
-    
 
 }

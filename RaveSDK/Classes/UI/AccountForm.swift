@@ -17,7 +17,7 @@ class AccountForm: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     lazy var phoneNumberTextField: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -29,7 +29,7 @@ class AccountForm: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     lazy var accountNumberTextField: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -41,7 +41,7 @@ class AccountForm: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     lazy var dobTextField: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -91,7 +91,7 @@ class AccountForm: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(accountImageView)
@@ -104,32 +104,32 @@ class AccountForm: UIView {
         addSubview(goBack)
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            
-            accountImageView.topAnchor.constraint(equalTo: topAnchor, constant:25),
+
+            accountImageView.topAnchor.constraint(equalTo: topAnchor, constant: 25),
             accountImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             accountImageView.heightAnchor.constraint(equalToConstant: 44),
             accountImageView.widthAnchor.constraint(equalToConstant: 129),
-            
+
             stackView.topAnchor.constraint(equalTo: accountImageView.bottomAnchor, constant: 31),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
-            
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+
             accountPayButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             accountPayButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             accountPayButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 19),
             accountPayButton.heightAnchor.constraint(equalToConstant: 50),
-            
+
             goBack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             goBack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            goBack.topAnchor.constraint(equalTo: accountPayButton.bottomAnchor, constant: 8),
+            goBack.topAnchor.constraint(equalTo: accountPayButton.bottomAnchor, constant: 8)
             //goBack.heightAnchor.constraint(equalToConstant: 50),
-            
+
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

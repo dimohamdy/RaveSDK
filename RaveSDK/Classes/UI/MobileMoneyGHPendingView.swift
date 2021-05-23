@@ -19,22 +19,22 @@ class MobileMoneyGHPendingView: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(mobileMoneyPendingLabel)
-       
+
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            mobileMoneyPendingLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            mobileMoneyPendingLabel.topAnchor.constraint(equalTo: topAnchor, constant:71),
-            mobileMoneyPendingLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            mobileMoneyPendingLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            mobileMoneyPendingLabel.topAnchor.constraint(equalTo: topAnchor, constant: 71),
+            mobileMoneyPendingLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
             ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

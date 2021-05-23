@@ -11,15 +11,15 @@ import Alamofire
 
 class RavePayService: NSObject {
 
-    class func queryTransaction(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-        
-		let req: URLConvertible = RaveURLHelper.getV2URL("QUERY_TRANSACTION",withURLParam: [:])
-		
+    class func queryTransaction(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
+		let req: URLConvertible = RaveURLHelper.getV2URL("QUERY_TRANSACTION", withURLParam: [:])
+
 		AF.request(req, method: .post, parameters: bodyParam).responseJSON { res in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					resultCallback(json)
 				}
 			case .failure(let error):
@@ -27,19 +27,18 @@ class RavePayService: NSObject {
 				errorCallback( error.localizedDescription)
 			}
 		}
-        
-        
+
     }
 
-    class func mpesaQueryTransaction(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		let req: URLConvertible = RaveURLHelper.getURL("MPESA_QUERY_TRANSACTION",withURLParam: [:])
+    class func mpesaQueryTransaction(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+		let req: URLConvertible = RaveURLHelper.getURL("MPESA_QUERY_TRANSACTION", withURLParam: [:])
 
-        AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+        AF.request(req, method: .post, parameters: bodyParam).responseJSON {
             (res) -> Void in
 
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)
@@ -50,36 +49,35 @@ class RavePayService: NSObject {
 			}
         }
 
-
     }
-    class func getSavedCards(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ result:SavedCardResponse) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+    class func getSavedCards(_ bodyParam: [String: String], resultCallback:@escaping (_ result: SavedCardResponse) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("SAVE_CARD_LOOKUP")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseDecodable(of: SavedCardResponse.self) {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseDecodable(of: SavedCardResponse.self) {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
 				print(res.request?.urlRequest ?? "")
 				resultCallback(value)
-				
+
 			case .failure(let error):
 				print(error)
 				errorCallback( error.localizedDescription)
 			}
 		}
     }
-    class func getFee(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
+    class func getFee(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
        // print(bodyParam.description)
 		let req: URLConvertible = RaveURLHelper.getURL("FEE")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)
@@ -90,16 +88,16 @@ class RavePayService: NSObject {
 			}
 		}
     }
-    class func removeSavedCard(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+    class func removeSavedCard(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("REMOVE_SAVEDCARD")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)
@@ -111,21 +109,21 @@ class RavePayService: NSObject {
 		}
     }
 
-    class func sendOTP(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ result:String) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+    class func sendOTP(_ bodyParam: [String: String], resultCallback:@escaping (_ result: String) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("SEND_SAVEDCARD_OTP")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
-					if let status = json["status"] as? String{
+				if let json = value as? [String: AnyObject] {
+					if let status = json["status"] as? String {
 						if status == "success"{
 							resultCallback("Enter the OTP sent to your mobile phone and email address to continue")
 						}
-					}else{
+					} else {
 						let message = json["message"] as? String
 						errorCallback(message ?? "An error occured")
 					}
@@ -136,35 +134,35 @@ class RavePayService: NSObject {
 			}
 		}
     }
-	
-    class func getBanks(resultCallback:@escaping (_ result:[Bank]?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+
+    class func getBanks(resultCallback:@escaping (_ result: [Bank]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("BANK_LIST")
-		
-		AF.request(req,method: .get, parameters: nil).responseDecodable(of: [Bank].self) {
+
+		AF.request(req, method: .get, parameters: nil).responseDecodable(of: [Bank].self) {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
 				print(res.request?.urlRequest ?? "")
 				resultCallback(value)
-				
+
 			case .failure(let error):
 				print(error)
 				errorCallback( error.localizedDescription)
 			}
 		}
     }
-    class func charge(_ bodyParam:Dictionary<String,Any>,resultCallback:@escaping (_ Result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+    class func charge(_ bodyParam: [String: Any], resultCallback:@escaping (_ Result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("CHARGE_CARD")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)
@@ -176,16 +174,16 @@ class RavePayService: NSObject {
 		}
 
      }
-    class func chargeWithToken(_ bodyParam:Dictionary<String,Any>,resultCallback:@escaping (_ Result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+    class func chargeWithToken(_ bodyParam: [String: Any], resultCallback:@escaping (_ Result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("CHARGE_WITH_TOKEN")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)
@@ -197,16 +195,16 @@ class RavePayService: NSObject {
 		}
     }
 
-    class func validateCardOTP(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ Result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
-		
+    class func validateCardOTP(_ bodyParam: [String: String], resultCallback:@escaping (_ Result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
 		let req: URLConvertible = RaveURLHelper.getURL("VALIDATE_CARD_OTP")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)
@@ -217,16 +215,16 @@ class RavePayService: NSObject {
 			}
 		}
     }
-    class func validateAccountOTP(_ bodyParam:Dictionary<String,String>,resultCallback:@escaping (_ Result:Dictionary<String,AnyObject>?) -> Void ,errorCallback:@escaping (_ err:String) -> Void ){
+    class func validateAccountOTP(_ bodyParam: [String: String], resultCallback:@escaping (_ Result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
 
 		let req: URLConvertible = RaveURLHelper.getURL("VALIDATE_ACCOUNT_OTP")
-		
-		AF.request(req,method: .post, parameters: bodyParam).responseJSON {
+
+		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
 			(res) -> Void in
-			
+
 			switch res.result {
 			case .success(let value):
-				if let json = value as? Dictionary<String,AnyObject> {
+				if let json = value as? [String: AnyObject] {
 					print(res.request?.urlRequest ?? "")
 					print(json)
 					resultCallback(json)

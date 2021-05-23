@@ -8,18 +8,17 @@
 
 import UIKit
 import CommonCrypto
-//import ifaddrs
 
 struct AnchoredConstraints {
     var top, leading, bottom, trailing, width, height: NSLayoutConstraint?
 }
 
-enum Style{
-    case  success , error
-    
+enum Style {
+    case  success, error
 }
-func showSnackBarWithMessage(msg: String, style:Style = .success,autoComplete:Bool = false, completion:(()-> Void)? = nil){
-    if autoComplete{
+
+func showSnackBarWithMessage(msg: String, style: Style = .success, autoComplete: Bool = false, completion:(() -> Void)? = nil) {
+    if autoComplete {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             completion?()
         }
@@ -27,27 +26,28 @@ func showSnackBarWithMessage(msg: String, style:Style = .success,autoComplete:Bo
     let message =  msg
     let snack = SnackBar.shared
     snack.message = message
-    
-    switch style{
+
+    switch style {
     case .success:
         snack.statusColor = UIColor(hex: "#397A7F")
     case .error:
         snack.statusColor = UIColor(hex: "#9C4A47")
     }
-    
+
     snack.show()
 }
 
-public enum SubAccountChargeType:String {
-    case flat = "flat" , percentage = "percentage"
+public enum SubAccountChargeType: String {
+    case flat = "flat", percentage = "percentage"
 }
-public class SubAccount{
-    public let id:String
-    public let ratio:Double?
-    public let charge_type:SubAccountChargeType?
-    public let charge:Double?
-    
-    public init(id:String , ratio:Double?, charge_type:SubAccountChargeType? ,charge:Double?) {
+
+public class SubAccount {
+    public let id: String
+    public let ratio: Double?
+    public let charge_type: SubAccountChargeType?
+    public let charge: Double?
+
+    public init(id: String, ratio: Double?, charge_type: SubAccountChargeType?, charge: Double?) {
         self.id = id
         self.ratio = ratio
         self.charge_type = charge_type
@@ -55,178 +55,167 @@ public class SubAccount{
     }
 }
 
-
 func MD5(string: String) -> Data? {
-    guard let messageData = string.data(using:String.Encoding.utf8) else { return nil }
+    guard let messageData = string.data(using: String.Encoding.utf8) else { return nil }
     var digestData = Data(count: Int(CC_MD5_DIGEST_LENGTH))
-    
+
     _ = digestData.withUnsafeMutableBytes {digestBytes in
         messageData.withUnsafeBytes {messageBytes in
             CC_MD5(messageBytes, CC_LONG(messageData.count), digestBytes)
         }
     }
-    
+
     return digestData
 }
 
-
- func getEncryptionKey(_ secretKey:String)->String {
-    let md5Data = MD5(string:secretKey)
+func getEncryptionKey(_ secretKey: String) -> String {
+    let md5Data = MD5(string: secretKey)
     let md5Hex =  md5Data!.map { String(format: "%02hhx", $0) }.joined()
-    
+
     var secretKeyHex = ""
-    
+
     if secretKey.contains("FLWSECK-") {
         secretKeyHex = secretKey.replacingOccurrences(of: "FLWSECK-", with: "")
     }
-//    if secretKey.contains("FLWSECK_TEST") {
-//        secretKeyHex = secretKey.replacingOccurrences(of: "FLWSECK_TEST", with: "_TEST")
-//    }
     if secretKey.contains("-X") {
         secretKeyHex = secretKeyHex.replacingOccurrences(of: "-X", with: "")
     }
     secretKeyHex = secretKey.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
     let index = secretKeyHex.index(secretKeyHex.startIndex, offsetBy: 12)
     let first12 = secretKeyHex.substring(to: index)
-    
-    let last12 = md5Hex.substring(from:md5Hex.index(md5Hex.endIndex, offsetBy: -12))
+
+    let last12 = md5Hex.substring(from: md5Hex.index(md5Hex.endIndex, offsetBy: -12))
     return first12 + last12
-    
+
 }
 
 func getIFAddresses() -> [String] {
     return["127.0.0.1"]
 }
 
-let themeColor:UIColor = UIColor(hex: "#382E4B")
-let secondaryThemeColor:UIColor = UIColor(hex: "#E1E2E2")
+let themeColor: UIColor = UIColor(hex: "#382E4B")
+let secondaryThemeColor: UIColor = UIColor(hex: "#E1E2E2")
 
-func styleTextField(_ textField:UITextField, leftView:UIView? = nil){
+func styleTextField(_ textField: UITextField, leftView: UIView? = nil) {
     textField.layer.borderWidth = 1
     textField.layer.borderColor = UIColor(hex: "#E1E2E2").cgColor
     textField.layer.cornerRadius = textField.frame.height / 2
     //textField.layer.cornerRadius = 4
-    if let v = leftView{
+    if let v = leftView {
         textField.leftView = v
         textField.leftViewMode = .always
-    }else{
+    } else {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 1))
         textField.leftViewMode = .always
     }
 }
+
 extension Bundle {
-   static func getResourcesBundle() -> Bundle? {
-    let bundle = Bundle(for:NewRavePayViewController.self)
-      guard let resourcesBundleUrl = bundle.resourceURL?.appendingPathComponent("RaveSDK.bundle") else {
-         return nil
-      }
-      return Bundle(url: resourcesBundleUrl)
-   }
+    static func getResourcesBundle() -> Bundle? {
+        let bundle = Bundle(for: NewRavePayViewController.self)
+        guard let resourcesBundleUrl = bundle.resourceURL?.appendingPathComponent("RaveSDK.bundle") else {
+            return nil
+        }
+        return Bundle(url: resourcesBundleUrl)
+    }
 }
 
-
-extension String{
-    func containsIgnoringCase(find: String) -> Bool{
+extension String {
+    func containsIgnoringCase(find: String) -> Bool {
         return self.range(of: find, options: .caseInsensitive) != nil
     }
-    func getLocale(code:String) -> Locale{
-		switch code {
-		case "NGN":
-			return Locale(identifier: "ig_Ng")
-		case "USD":
-			return Locale(identifier: "en_US")
-		case "GBP":
-			return Locale(identifier: "en_GB")
-		case "KES":
-			return Locale(identifier: "kam_KE")
-		case "GHS":
-			return Locale(identifier: "ak_GH")
-		case "ZAR":
-			return Locale(identifier: "en_ZA")
-		case "UGX":
-			return Locale(identifier: "nyn_UG")
-		default:
-			let locales: [String] = NSLocale.availableLocaleIdentifiers
-			let loc = locales.map { (item) -> Locale in
-				return Locale(identifier: item)
-			}
-			
-			let current = loc.filter { (item) -> Bool in
-				if let it = item.currencyCode{
-					return it == code
-				}else{
-					return false
-				}
-			}.first
-			return current ?? Locale.current
-			
-		}
+    func getLocale(code: String) -> Locale {
+        switch code {
+        case "NGN":
+            return Locale(identifier: "ig_Ng")
+        case "USD":
+            return Locale(identifier: "en_US")
+        case "GBP":
+            return Locale(identifier: "en_GB")
+        case "KES":
+            return Locale(identifier: "kam_KE")
+        case "GHS":
+            return Locale(identifier: "ak_GH")
+        case "ZAR":
+            return Locale(identifier: "en_ZA")
+        case "UGX":
+            return Locale(identifier: "nyn_UG")
+        default:
+            let locales: [String] = NSLocale.availableLocaleIdentifiers
+            let loc = locales.map { (item) -> Locale in
+                return Locale(identifier: item)
+            }
+
+            let current = loc.filter { (item) -> Bool in
+                if let it = item.currencyCode {
+                    return it == code
+                } else {
+                    return false
+                }
+            }.first
+            return current ?? Locale.current
+
+        }
     }
-	func toRaveCurrency(_ withFraction:Int = 0, locale:Locale = Locale.current) -> String{
+    func toRaveCurrency(_ withFraction: Int = 0, locale: Locale = Locale.current) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-		formatter.minimumFractionDigits = withFraction
+        formatter.minimumFractionDigits = withFraction
         formatter.maximumFractionDigits = withFraction
-		formatter.generatesDecimalNumbers = true
-		formatter.roundingMode = .down
+        formatter.generatesDecimalNumbers = true
+        formatter.roundingMode = .down
         formatter.locale = locale
         if self == ""{
             return formatter.string(from: NSNumber(value: 0))!
-        }else{
+        } else {
             let val = (self as NSString).doubleValue
             return formatter.string(from: NSNumber(value: val))!
         }
     }
-   /* func containsIgnoringCase(find: String) -> Bool{
-        return self.range(of: find, options: .caseInsensitive) != nil
-    }*/
     func index(of target: String) -> Int? {
-            if let range = self.range(of: target) {
-                return self.distance(from: startIndex, to: range.lowerBound)
-            } else {
-                return nil
-            }
+        if let range = self.range(of: target) {
+            return self.distance(from: startIndex, to: range.lowerBound)
+        } else {
+            return nil
+        }
     }
-        
+
     func lastIndex(of target: String) -> Int? {
-            if let range = self.range(of: target, options: .backwards) {
-                return self.distance(from: startIndex, to: range.lowerBound)
-            } else {
-                return nil
-            }
+        if let range = self.range(of: target, options: .backwards) {
+            return self.distance(from: startIndex, to: range.lowerBound)
+        } else {
+            return nil
+        }
     }
-    func toCountryCurrency(code:String, fraction:Int = 3) -> String{
-        var str:String = ""
+    func toCountryCurrency(code: String, fraction: Int = 3) -> String {
+        var str: String = ""
         str = self.toRaveCurrency(fraction, locale: getLocale(code: code))
         return str
     }
-    
+
 }
 
-public extension Dictionary{
-    func jsonStringify()-> String {
+public extension Dictionary {
+    func jsonStringify() -> String {
         var str = ""
-            do
-            {
+        do {
                 let data = try JSONSerialization.data(withJSONObject: self, options: JSONSerialization.WritingOptions(rawValue: 0))
-                if let string = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                {
-                     str = string as String
+                if let string = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+                    str = string as String
                 }
-            }
-            catch
-            {
-            }
-        
+            } catch {
+        }
+
         return str
     }
-    
-    mutating func merge<K, V>(_ dict: [K: V]){
+
+    mutating func merge<K, V>(_ dict: [K: V]) {
         for (k, v) in dict {
             self.updateValue(v as! Value, forKey: k as! Key)
         }
     }
 }
+
 extension UIView {
     func fillSuperview(padding: UIEdgeInsets = .zero) {
         translatesAutoresizingMaskIntoConstraints = false
@@ -251,7 +240,8 @@ extension UIView {
         widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
-    func centerInViewX(top: NSLayoutYAxisAnchor?, bottom: NSLayoutYAxisAnchor?,padding: UIEdgeInsets = .zero, size: CGSize = .zero){
+
+    func centerInViewX(top: NSLayoutYAxisAnchor?, bottom: NSLayoutYAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) {
         translatesAutoresizingMaskIntoConstraints = false
         guard let superView = superview else {return}
         centerXAnchor.constraint(equalTo: superView.centerXAnchor).isActive = true
@@ -268,7 +258,8 @@ extension UIView {
             heightAnchor.constraint(equalToConstant: size.height).isActive = true
         }
     }
-    func centerInViewY(leading: NSLayoutXAxisAnchor?, trailing: NSLayoutXAxisAnchor?,padding: UIEdgeInsets = .zero, size: CGSize = .zero){
+
+    func centerInViewY(leading: NSLayoutXAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) {
         translatesAutoresizingMaskIntoConstraints = false
         guard let superView = superview else {return}
         centerYAnchor.constraint(equalTo: superView.centerYAnchor).isActive = true
@@ -285,8 +276,9 @@ extension UIView {
             heightAnchor.constraint(equalToConstant: size.height).isActive = true
         }
     }
+
     @discardableResult
-    func anchor(top: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero, centerX:NSLayoutXAxisAnchor? = nil, centerY:NSLayoutYAxisAnchor? = nil) -> AnchoredConstraints  {
+    func anchor(top: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero, centerX: NSLayoutXAxisAnchor? = nil, centerY: NSLayoutYAxisAnchor? = nil) -> AnchoredConstraints {
         translatesAutoresizingMaskIntoConstraints = false
 
         translatesAutoresizingMaskIntoConstraints = false
@@ -316,7 +308,7 @@ extension UIView {
             anchoredConstraints.height = heightAnchor.constraint(equalToConstant: size.height)
         }
 
-        [anchoredConstraints.top, anchoredConstraints.leading, anchoredConstraints.bottom, anchoredConstraints.trailing, anchoredConstraints.width, anchoredConstraints.height].forEach{ $0?.isActive = true }
+        [anchoredConstraints.top, anchoredConstraints.leading, anchoredConstraints.bottom, anchoredConstraints.trailing, anchoredConstraints.width, anchoredConstraints.height].forEach { $0?.isActive = true }
         return anchoredConstraints
     }
     func constrainWidth(constant: CGFloat) {
@@ -337,7 +329,6 @@ extension UIView {
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 1
 
-
         self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
 
         // self.layer.shouldRasterize = true
@@ -352,13 +343,12 @@ extension UIView {
         layer.shadowOpacity = opacity
         layer.shadowPath = UIBezierPath.init(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).cgPath
 
-
         let backgroundCGColor = self.backgroundColor?.cgColor
         self.backgroundColor = nil
         layer.backgroundColor =  backgroundCGColor
     }
 
-    func removeShadow(){
+    func removeShadow() {
         self.layer.shadowOpacity = 0
     }
 
@@ -375,16 +365,15 @@ extension UIView {
     func getAllSubviews<T: UIView>() -> [T] {
         return UIView.getAllSubviews(view: self) as [T]
     }
-
-
 }
+
 public extension UIColor {
     convenience init(hex: String) {
-        var red:   CGFloat = 0.0
+        var red: CGFloat = 0.0
         var green: CGFloat = 0.0
-        var blue:  CGFloat = 0.0
+        var blue: CGFloat = 0.0
         var alpha: CGFloat = 1.0
-        var hex:   String = hex
+        var hex: String = hex
 
         if hex.hasPrefix("#") {
             let index   = hex.index(hex.startIndex, offsetBy: 1)
@@ -394,7 +383,7 @@ public extension UIColor {
         let scanner = Scanner(string: hex)
         var hexValue: CUnsignedLongLong = 0
         if scanner.scanHexInt64(&hexValue) {
-            switch (hex.count) {
+            switch hex.count {
             case 3:
                 red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
                 green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
@@ -419,7 +408,6 @@ public extension UIColor {
         } else {
             print("Scan hex error")
         }
-        self.init(red:red, green:green, blue:blue, alpha:alpha)
+        self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
 }
-

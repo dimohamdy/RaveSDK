@@ -18,7 +18,7 @@ class MobileMoneyUganda: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     lazy var mobileMoneyUgandaPhone: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -29,7 +29,7 @@ class MobileMoneyUganda: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     lazy var mobileMoneyUgandaPayButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("PAY", for: .normal)
@@ -46,29 +46,28 @@ class MobileMoneyUganda: UIView {
         addSubview(mobileMoneyUgandaPayButton)
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant:20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             titleLabel.heightAnchor.constraint(equalToConstant: 55),
-            
+
             mobileMoneyUgandaPhone.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             mobileMoneyUgandaPhone.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mobileMoneyUgandaPhone.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35),
             mobileMoneyUgandaPhone.heightAnchor.constraint(equalToConstant: 57),
-            
+
             mobileMoneyUgandaPayButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             mobileMoneyUgandaPayButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mobileMoneyUgandaPayButton.topAnchor.constraint(equalTo: mobileMoneyUgandaPhone.bottomAnchor, constant: 26),
-            mobileMoneyUgandaPayButton.heightAnchor.constraint(equalToConstant: 50),
+            mobileMoneyUgandaPayButton.heightAnchor.constraint(equalToConstant: 50)
             ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-  
 
 }

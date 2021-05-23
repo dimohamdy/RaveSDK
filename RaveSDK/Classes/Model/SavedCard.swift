@@ -8,12 +8,12 @@
 
 import Foundation
 public struct SavedCard: Codable {
-    var device:String?
-    var mobileNumber:String?
-    var email:String?
-    var cardHash:String?
-    var card:Card?
-    
+    var device: String?
+    var mobileNumber: String?
+    var email: String?
+    var cardHash: String?
+    var card: Card?
+
 	public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         device = try values.decodeIfPresent(String?.self, forKey: .device) ?? nil
@@ -24,8 +24,8 @@ public struct SavedCard: Codable {
     }
 }
 
-extension SavedCard{
-    enum CodingKeys:String,CodingKey{
+extension SavedCard {
+    enum CodingKeys: String, CodingKey {
         case device = "device"
         case mobileNumber = "mobile_number"
         case email = "email"
@@ -34,10 +34,9 @@ extension SavedCard{
     }
 }
 
-
 struct Card: Codable {
-    var maskedPan:String?
-    var cardBrand:String?
+    var maskedPan: String?
+    var cardBrand: String?
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         maskedPan = try values.decodeIfPresent(String?.self, forKey: .maskedPan) ?? nil
@@ -45,18 +44,17 @@ struct Card: Codable {
     }
 }
 
-extension Card{
-    enum CodingKeys:String,CodingKey{
+extension Card {
+    enum CodingKeys: String, CodingKey {
         case maskedPan = "masked_pan"
         case cardBrand = "card_brand"
     }
 }
 
-
 struct SavedCardResponse: Codable {
-    var status:String?
-    var message:String?
-    var cards:[SavedCard]?
+    var status: String?
+    var message: String?
+    var cards: [SavedCard]?
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         status = try values.decodeIfPresent(String?.self, forKey: .status) ?? nil
@@ -64,8 +62,8 @@ struct SavedCardResponse: Codable {
         cards = try values.decodeIfPresent([SavedCard]?.self, forKey: .cards) ?? nil
     }
 }
-extension SavedCardResponse{
-    enum CodingKeys:String,CodingKey{
+extension SavedCardResponse {
+    enum CodingKeys: String, CodingKey {
         case status
         case message
         case cards = "data"

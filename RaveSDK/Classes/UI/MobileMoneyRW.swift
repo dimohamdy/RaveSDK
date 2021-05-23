@@ -19,7 +19,7 @@ class MobileMoneyRW: UIView {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    
+
     lazy var mobileMoneyRWPhone: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
@@ -30,7 +30,7 @@ class MobileMoneyRW: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
+
     lazy var mobileMoneyRWPayButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("PAY", for: .normal)
@@ -47,30 +47,28 @@ class MobileMoneyRW: UIView {
         addSubview(mobileMoneyRWPayButton)
         setupConstraints()
     }
-    
-    func setupConstraints(){
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant:20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             titleLabel.heightAnchor.constraint(equalToConstant: 55),
-            
+
             mobileMoneyRWPhone.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             mobileMoneyRWPhone.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mobileMoneyRWPhone.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35),
             mobileMoneyRWPhone.heightAnchor.constraint(equalToConstant: 57),
-            
+
             mobileMoneyRWPayButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             mobileMoneyRWPayButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mobileMoneyRWPayButton.topAnchor.constraint(equalTo: mobileMoneyRWPhone.bottomAnchor, constant: 26),
-            mobileMoneyRWPayButton.heightAnchor.constraint(equalToConstant: 50),
+            mobileMoneyRWPayButton.heightAnchor.constraint(equalToConstant: 50)
       ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 
-   
 }

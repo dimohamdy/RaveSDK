@@ -19,7 +19,7 @@ class UKAccountDetailsView: UIView {
              label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
              return label
          }()
-         
+
         lazy var beneficiaryNameLabel: UILabel = {
             let label = UILabel()
             label.text = "Beneficiary Name"
@@ -56,7 +56,7 @@ class UKAccountDetailsView: UIView {
                 label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
                     return label
          }()
-    
+
         lazy var accountNumberLabel: UILabel = {
             let label = UILabel()
             label.text = "Account Number"
@@ -111,7 +111,7 @@ class UKAccountDetailsView: UIView {
                label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
                    return label
         }()
-        
+
          lazy var accountContinueButton: UIButton = {
              let button = UIButton(type: .system)
              button.setTitle("I have completed this payment", for: .normal)
@@ -121,7 +121,6 @@ class UKAccountDetailsView: UIView {
              button.translatesAutoresizingMaskIntoConstraints = false
              return button
          }()
-    
 
          override init(frame: CGRect) {
              super.init(frame: frame)
@@ -139,55 +138,53 @@ class UKAccountDetailsView: UIView {
             addSubview(accountContinueButton)
             setupConstraints()
          }
-         
-         func setupConstraints(){
+
+         func setupConstraints() {
              NSLayoutConstraint.activate([
-                 titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:20),
-                 titleLabel.topAnchor.constraint(equalTo: topAnchor, constant:20),
-                 titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant:-20),
+                 titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                 titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+                 titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                  titleLabel.heightAnchor.constraint(equalToConstant: 55),
-                 
+
                  beneficiaryNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
                  beneficiaryNameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-                 
+
                  beneficiaryNameLabelVlaue.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
                  beneficiaryNameLabelVlaue.centerYAnchor.constraint(equalTo: beneficiaryNameLabel.centerYAnchor),
-                 
-                 amountLabel.leadingAnchor.constraint(equalTo:beneficiaryNameLabel.leadingAnchor),
+
+                 amountLabel.leadingAnchor.constraint(equalTo: beneficiaryNameLabel.leadingAnchor),
                  amountLabel.topAnchor.constraint(equalTo: beneficiaryNameLabel.bottomAnchor, constant: 10),
-                 
+
                  amountValue.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
                  amountValue.centerYAnchor.constraint(equalTo: amountLabel.centerYAnchor),
-                 
-                 accountNumberLabel.leadingAnchor.constraint(equalTo:amountLabel.leadingAnchor),
+
+                 accountNumberLabel.leadingAnchor.constraint(equalTo: amountLabel.leadingAnchor),
                  accountNumberLabel.topAnchor.constraint(equalTo: amountLabel.bottomAnchor, constant: 10),
-                 
+
                  accountNumberValue.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
                  accountNumberValue.centerYAnchor.constraint(equalTo: accountNumberLabel.centerYAnchor),
-                 
-                 sortCodeLabel.leadingAnchor.constraint(equalTo:accountNumberLabel.leadingAnchor),
+
+                 sortCodeLabel.leadingAnchor.constraint(equalTo: accountNumberLabel.leadingAnchor),
                  sortCodeLabel.topAnchor.constraint(equalTo: accountNumberLabel.bottomAnchor, constant: 10),
-                 
+
                  sortCodeValue.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
                  sortCodeValue.centerYAnchor.constraint(equalTo: sortCodeLabel.centerYAnchor),
-                 
-                 referenceNumberLabel.leadingAnchor.constraint(equalTo:sortCodeLabel.leadingAnchor),
+
+                 referenceNumberLabel.leadingAnchor.constraint(equalTo: sortCodeLabel.leadingAnchor),
                  referenceNumberLabel.topAnchor.constraint(equalTo: sortCodeLabel.bottomAnchor, constant: 10),
-                 
+
                  referenceNumberValue.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
                  referenceNumberValue.centerYAnchor.constraint(equalTo: referenceNumberLabel.centerYAnchor),
-                 
+
                  accountContinueButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
                  accountContinueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                  accountContinueButton.topAnchor.constraint(equalTo: referenceNumberValue.bottomAnchor, constant: 16),
-                 accountContinueButton.heightAnchor.constraint(equalToConstant: 50),
+                 accountContinueButton.heightAnchor.constraint(equalToConstant: 50)
            ])
          }
-         
+
          required init?(coder aDecoder: NSCoder) {
              fatalError("init(coder:) has not been implemented")
          }
-         
-
 
 }
