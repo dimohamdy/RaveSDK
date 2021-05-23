@@ -100,7 +100,7 @@ func styleTextField(_ textField: UITextField, leftView: UIView? = nil) {
     textField.layer.borderWidth = 1
     textField.layer.borderColor = UIColor(hex: "#E1E2E2").cgColor
     textField.layer.cornerRadius = textField.frame.height / 2
-    //textField.layer.cornerRadius = 4
+
     if let v = leftView {
         textField.leftView = v
         textField.leftViewMode = .always
@@ -330,8 +330,6 @@ extension UIView {
         self.layer.shadowRadius = 1
 
         self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-
-        // self.layer.shouldRasterize = true
     }
 
     func addShadow(offset: CGSize, color: UIColor, radius: CGFloat, opacity: Float) {

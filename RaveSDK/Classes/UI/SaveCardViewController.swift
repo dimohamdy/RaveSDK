@@ -13,7 +13,6 @@ protocol CardSelect: class {
 
 class SaveCardViewController: UIViewController {
     var savedCards: [SavedCard]?
-  //  @IBOutlet weak var saveCardTable: UITableView!
     lazy var saveCardTable: UITableView = {
         let table = UITableView()
         table.backgroundColor = .clear

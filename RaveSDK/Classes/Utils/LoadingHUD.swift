@@ -10,7 +10,6 @@ import UIKit
 import Lottie
 
 class LoadingHUD: UIView {
-    //let appDelegate = UIApplication.shared.delegate as? AppDelegate
     var animation: AnimationView!
 
     var bgColor: UIColor? = .clear
@@ -94,7 +93,6 @@ class LoadingHUD: UIView {
     }
 
     func hide() {
-//        animation.stop()
         isHidden = true
         removeFromSuperview()
     }

@@ -471,22 +471,6 @@ public class RaveCardClient {
 
                         }
                     } else {
-//                        if let data = res ["data"] as? [String:AnyObject]{
-//                            if let _data = res ["data"] as? [String:AnyObject]{
-//                                if let message = _data["responsemessage"] as? String{
-//                                    if (self.isMasterCard() && !(message.containsIgnoringCase(find: "insufficient"))){
-//                                       let tx = data["tx"] as? [String:AnyObject]
-//                                       self.retryChargeValue =  tx?["flwRef"] as? String
-//                                       self.isRetryCharge = true
-//                                       self.chargeCard()
-//                                    }
-//                                }else{
-//                                    let message = res ["message"] as? String
-//                                    self.validateError?(message,nil)
-//                                }
-//                            }
-//
-//                        }
                         let message = res ["message"] as? String
                         self.validateError?(message, nil)
 

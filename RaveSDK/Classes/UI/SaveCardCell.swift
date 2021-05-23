@@ -9,10 +9,6 @@
 import UIKit
 
 class SaveCardCell: UITableViewCell {
-   // @IBOutlet weak var maskCardLabel: UILabel!
-   // @IBOutlet weak var brandImage: UIImageView!
-   // @IBOutlet weak var contentContainer: UIView!
-
     lazy var contentContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white

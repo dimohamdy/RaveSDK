@@ -69,7 +69,6 @@ class RavePayService: NSObject {
 		}
     }
     class func getFee(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
-       // print(bodyParam.description)
 		let req: URLConvertible = RaveURLHelper.getURL("FEE")
 
 		AF.request(req, method: .post, parameters: bodyParam).responseJSON {

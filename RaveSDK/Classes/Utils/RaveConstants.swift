@@ -12,11 +12,9 @@ import Alamofire
 class RaveConstants: NSObject {
 
     class func baseURL () -> String {
-        //return "https://ravesandbox.azurewebsites.net"
         return "https://rave-api-v2.herokuapp.com"
     }
     class func liveBaseURL() -> String {
-       // return "https://raveapi.azurewebsites.net"
         return "https://api.ravepay.co"
 
     }
@@ -72,7 +70,7 @@ class RaveConstants: NSObject {
         return NetworkReachabilityManager()!.isReachable
     }
 
-    class func relativeURL()->[String: String] {
+    class func relativeURL() -> [String: String] {
         return [
             "CHARGE_CARD": "/flwv3-pug/getpaidx/api/charge",
             "VALIDATE_CARD_OTP": "/flwv3-pug/getpaidx/api/validatecharge",
@@ -88,21 +86,7 @@ class RaveConstants: NSObject {
         ]
     }
 
-    class func headerConstants(_ headerParam: [String: String])->[String: String] {
-
-       /* var defaultsDict:Dictionary<String,String>  =  [
-            "apikey":apiKey,
-            "secret": apiSecret]*/
-
-//        if(headerParam.isEmpty){
-//            return defaultsDict
-//        }else{
-//            defaultsDict.merge(headerParam)
-//            return defaultsDict
-//        }
-
+    class func headerConstants(_ headerParam: [String: String]) -> [String: String] {
        return  headerParam
-
     }
-
 }

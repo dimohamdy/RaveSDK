@@ -21,10 +21,7 @@ class Expandables {
 enum OTPType {
     case card, bank, savedCard
 }
-//protocol  RavePayProtocol : class{
-//    func tranasctionSuccessful(flwRef:String?)
-//    func tranasctionFailed(flwRef:String?)
-//}
+
 public protocol  RavePayProtocol: class {
     func tranasctionSuccessful(flwRef: String?, responseData: [String: Any]?)
     func tranasctionFailed(flwRef: String?, responseData: [String: Any]?)
@@ -621,9 +618,6 @@ public class NewRavePayViewController: UITableViewController {
 
     func configureMobileMoney() {
         raveMobileMoney.transactionReference = RaveConfig.sharedConfig().transcationRef
-//        mobileMoneyContainer.addSubview(mobileMoneyContentView)
-//        mobileMoneyContainer.addSubview(mobileMoneyPendingView)
-//        mobileMoneyPendingView.isHidden = true
         ghsMobileMoneyPicker = UIPickerView()
         ghsMobileMoneyPicker.autoresizingMask  = [.flexibleWidth, .flexibleHeight]
         ghsMobileMoneyPicker.showsSelectionIndicator = true
@@ -846,12 +840,10 @@ public class NewRavePayViewController: UITableViewController {
     // MARK: - Table view data source
 
     override public func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
          return expandables.count
     }
 
     override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
          return expandables[section].isExpanded ? 1 : 0
     }
 
@@ -897,7 +889,6 @@ public class NewRavePayViewController: UITableViewController {
         case 0:
              return 0
         case 1:
-            //||  RaveConfig.sharedConfig().country == "UG"
             return  65
         case 2:
             return RaveConfig.sharedConfig().currencyCode == "NGN" || RaveConfig.sharedConfig().currencyCode == "USD" || RaveConfig.sharedConfig().currencyCode == "ZAR" ? 65 : 0
@@ -910,7 +901,6 @@ public class NewRavePayViewController: UITableViewController {
         case 6:
             return RaveConfig.sharedConfig().currencyCode == "RWF" ? 65 : 0
         case 7:
-           // return RaveConfig.sharedConfig().currencyCode == "XAF" || RaveConfig.sharedConfig().currencyCode == "XOF" ? 65 : 0
             return 0
         case 8:
             return RaveConfig.sharedConfig().currencyCode == "ZMW" ? 65 : 0
@@ -1008,8 +998,6 @@ public class NewRavePayViewController: UITableViewController {
     }
 
     override public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //  return expandables[indexPath.section].isExpanded ? self.view.frame.height - (180) : 0
-
         switch indexPath.section {
         case 0:
                    return expandables[indexPath.section].isExpanded ? self.view.frame.height - (200 + navBarHeight) : 0
@@ -1073,7 +1061,6 @@ public class NewRavePayViewController: UITableViewController {
             self.expandables = newExpandables
 
             self.tableView.deleteRows(at: expandedIndexPath, with: .fade)
-            //expandables[0].isExpanded = false
 
             self.expandables[section].isExpanded = true
             self.headers[section]?.arrowButton.setImage(UIImage(named: "rave_down_arrow", in: Bundle.getResourcesBundle(), compatibleWith: nil), for: .normal)
@@ -1114,7 +1101,6 @@ public class NewRavePayViewController: UITableViewController {
     func saveCardCallbacks() {
         if let _ = RaveConfig.sharedConfig().publicKey {
             if let deviceNumber = RaveConfig.sharedConfig().phoneNumber, deviceNumber != ""{
-               // LoadingHUD.shared().showInView(view: self.view)
                  LoadingHUD.shared().show()
                 raveCardClient.fetchSavedCards()
             }
@@ -1938,7 +1924,6 @@ extension NewRavePayViewController: UITextFieldDelegate, CardSelect, UIPickerVie
         //Collapse opened Tabs
         self.handelCloseOrExpandSection(section: 0)
         //Show web view
-        //let storyBoard = UIStoryboard(name: "Rave", bundle: nil)
         let controller = RavePayWebViewController()
         controller.flwRef = ref
         controller.url = url

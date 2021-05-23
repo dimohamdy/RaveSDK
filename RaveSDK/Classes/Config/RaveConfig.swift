@@ -15,7 +15,6 @@ public enum AuthModel {
 }
 public class RaveConfig {
     public var publicKey: String?
-   // public var secretKey:String?
     public var encryptionKey: String?
     public var isStaging: Bool = true
     public var email: String?

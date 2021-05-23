@@ -120,12 +120,6 @@ public class RaveAccountClient {
             guard let _ = amount else {
                 fatalError("Amount is missing")
             }
-//            guard let _ = accountNumber else {
-//                fatalError("Account Number is missing")
-//            }
-//            guard let _ = bankCode else {
-//                fatalError("Bank Code is missing")
-//            }
             guard let _ = phoneNumber else {
                 fatalError("Mobile Number is missing")
             }
@@ -236,9 +230,6 @@ public class RaveAccountClient {
                                         if let flwTransactionRef = data?["flw_reference"] as? String {
                                             self.chargeGBPOTPAuth?(flwTransactionRef, paymentCode ?? "", "")
                                             self.txRef = flwTransactionRef
-                                            //self.txRef = data?["transaction_reference"] as? String
-                                            //let txRef = data?["transaction_reference"] as? String
-                                           // self.queryTransaction(txRef: flwTransactionRef)
                                         }
                                 default:
                                     break
