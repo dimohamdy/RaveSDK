@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 protocol  RavePayWebProtocol: class {
-    func tranasctionSuccessful(flwRef: String, responseData: [String: Any]?)
+    func transactionSuccessful(flwRef: String, responseData: [String: Any]?)
 
 }
 
@@ -71,7 +71,7 @@ class RavePayWebViewController: UIViewController, WKNavigationDelegate, WKUIDele
         print(webView.url!.absoluteString)
         if webView.url!.absoluteString.contains("/complete") || webView.url!.absoluteString.contains("submitting_mock_form") {
             print("success page")
-            self.delegate?.tranasctionSuccessful(flwRef: flwRef!, responseData: nil)
+            self.delegate?.transactionSuccessful(flwRef: flwRef!, responseData: nil)
             self.progressView.removeFromSuperview()
             self.navigationController?.popViewController(animated: true)
         }

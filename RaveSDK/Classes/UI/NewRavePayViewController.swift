@@ -23,8 +23,8 @@ enum OTPType {
 }
 
 public protocol  RavePayProtocol: class {
-    func tranasctionSuccessful(flwRef: String?, responseData: [String: Any]?)
-    func tranasctionFailed(flwRef: String?, responseData: [String: Any]?)
+    func transactionSuccessful(flwRef: String?, responseData: [String: Any]?)
+    func transactionFailed(flwRef: String?, responseData: [String: Any]?)
 }
 
 @available(iOS 11.0, *)
@@ -1162,7 +1162,7 @@ public class NewRavePayViewController: UITableViewController {
 
               raveUKAccountClient.chargeSuccess = {[weak self](flwRef, data) in
                    LoadingHUD.shared().hide()
-                  self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+                  self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
                   self?.dismiss(animated: true)
               }
 
@@ -1185,12 +1185,12 @@ public class NewRavePayViewController: UITableViewController {
                   //Still show success
                   if let _data  = data {
                       let flwref = _data["flwRef"] as? String
-                      self?.delegate?.tranasctionSuccessful(flwRef: flwref, responseData: data)
+                      self?.delegate?.transactionSuccessful(flwRef: flwref, responseData: data)
                   } else {
                       if (message?.containsIgnoringCase(find: "Timed Out"))! {
-                         self?.delegate?.tranasctionSuccessful(flwRef: nil, responseData: data)
+                         self?.delegate?.transactionSuccessful(flwRef: nil, responseData: data)
                       } else {
-                          self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                          self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                       }
                   }
                   self?.dismiss(animated: true)
@@ -1260,7 +1260,7 @@ public class NewRavePayViewController: UITableViewController {
 
         raveAccountClient.chargeSuccess = {[weak self](flwRef, data) in
             LoadingHUD.shared().hide()
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
 
@@ -1283,12 +1283,12 @@ public class NewRavePayViewController: UITableViewController {
             //Still show success
             if let _data  = data {
                 let flwref = _data["flwRef"] as? String
-                self?.delegate?.tranasctionSuccessful(flwRef: flwref, responseData: data)
+                self?.delegate?.transactionSuccessful(flwRef: flwref, responseData: data)
             } else {
                 if (message?.containsIgnoringCase(find: "Timed Out"))! {
-                    self?.delegate?.tranasctionSuccessful(flwRef: nil, responseData: data)
+                    self?.delegate?.transactionSuccessful(flwRef: nil, responseData: data)
                 } else {
-                    self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                    self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                 }
             }
             self?.dismiss(animated: true)
@@ -1313,7 +1313,7 @@ public class NewRavePayViewController: UITableViewController {
 
         raveCardClient.chargeSuccess = {[weak self](flwRef, data) in
             LoadingHUD.shared().hide()
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveCardClient.feeSuccess = {[weak self](fee, chargeAmount) in
@@ -1374,12 +1374,12 @@ public class NewRavePayViewController: UITableViewController {
             if let _data  = data {
                 let tx = _data["tx"] as? [String: AnyObject]
                 let flwref = tx?["flwRef"] as? String
-                self?.delegate?.tranasctionSuccessful(flwRef: flwref, responseData: data)
+                self?.delegate?.transactionSuccessful(flwRef: flwref, responseData: data)
             } else {
                 if (message?.containsIgnoringCase(find: "Timed Out"))! {
-                    self?.delegate?.tranasctionSuccessful(flwRef: nil, responseData: data)
+                    self?.delegate?.transactionSuccessful(flwRef: nil, responseData: data)
                 } else {
-                    self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                    self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                 }
             }
             self?.dismiss(animated: true)
@@ -1406,7 +1406,7 @@ public class NewRavePayViewController: UITableViewController {
 
         }
         raveMpesaClient.chargeSuccess = {[weak self](flwRef, data) in
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveMpesaClient.error = {[weak self](message, data) in
@@ -1415,12 +1415,12 @@ public class NewRavePayViewController: UITableViewController {
                 if let msg = message {
                     if msg.containsIgnoringCase(find: "timeout") {
                         showSnackBarWithMessage(msg: message ?? "The request timed out", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     } else {
                         showSnackBarWithMessage(msg: message ?? "An error occurred", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     }
@@ -1482,7 +1482,7 @@ public class NewRavePayViewController: UITableViewController {
             self?.showWebView(url: authURL, ref: flwRef)
         }
         raveMobileMoneyZM.chargeSuccess = {[weak self](flwRef, data) in
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveMobileMoneyZM.error = {[weak self](message, data) in
@@ -1491,12 +1491,12 @@ public class NewRavePayViewController: UITableViewController {
                 if let msg = message {
                     if msg.containsIgnoringCase(find: "timeout") {
                         showSnackBarWithMessage(msg: message ?? "The request timed out", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     } else {
                         showSnackBarWithMessage(msg: message ?? "An error occurred", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     }
@@ -1527,7 +1527,7 @@ public class NewRavePayViewController: UITableViewController {
             self?.showWebView(url: authURL, ref: flwRef)
         }
         raveMobileMoneyFR.chargeSuccess = {[weak self](flwRef, data) in
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveMobileMoneyFR.error = {[weak self](message, data) in
@@ -1536,12 +1536,12 @@ public class NewRavePayViewController: UITableViewController {
                 if let msg = message {
                     if msg.containsIgnoringCase(find: "timeout") {
                         showSnackBarWithMessage(msg: message ?? "The request timed out", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     } else {
                         showSnackBarWithMessage(msg: message ?? "An error occurred", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     }
@@ -1572,7 +1572,7 @@ public class NewRavePayViewController: UITableViewController {
 
         }
         raveMobileMoneyRW.chargeSuccess = {[weak self](flwRef, data) in
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveMobileMoneyRW.error = {[weak self](message, data) in
@@ -1581,12 +1581,12 @@ public class NewRavePayViewController: UITableViewController {
                 if let msg = message {
                     if msg.containsIgnoringCase(find: "timeout") {
                         showSnackBarWithMessage(msg: message ?? "The request timed out", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     } else {
                         showSnackBarWithMessage(msg: message ?? "An error occurred", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     }
@@ -1619,7 +1619,7 @@ public class NewRavePayViewController: UITableViewController {
 
         }
         raveMobileMoneyUganda.chargeSuccess = {[weak self](flwRef, data) in
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveMobileMoneyUganda.error = {[weak self](message, data) in
@@ -1628,12 +1628,12 @@ public class NewRavePayViewController: UITableViewController {
                 if let msg = message {
                     if msg.containsIgnoringCase(find: "timeout") {
                         showSnackBarWithMessage(msg: message ?? "The request timed out", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     } else {
                         showSnackBarWithMessage(msg: message ?? "An error occurred", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     }
@@ -1752,7 +1752,7 @@ public class NewRavePayViewController: UITableViewController {
 
         }
         raveMobileMoney.chargeSuccess = {[weak self](flwRef, data) in
-            self?.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: data)
+            self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
         raveMobileMoney.error = {[weak self](message, data) in
@@ -1761,12 +1761,12 @@ public class NewRavePayViewController: UITableViewController {
                 if let msg = message {
                     if msg.containsIgnoringCase(find: "timeout") {
                         showSnackBarWithMessage(msg: message ?? "The request timed out", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     } else {
                         showSnackBarWithMessage(msg: message ?? "An error occurred", style: .error, autoComplete: true, completion: {
-                            self?.delegate?.tranasctionFailed(flwRef: nil, responseData: data)
+                            self?.delegate?.transactionFailed(flwRef: nil, responseData: data)
                             self?.dismiss(animated: true)
                         })
                     }
@@ -1790,9 +1790,9 @@ public class NewRavePayViewController: UITableViewController {
 }
 @available(iOS 11.0, *)
 extension NewRavePayViewController: UITextFieldDelegate, CardSelect, UIPickerViewDelegate, UIPickerViewDataSource, RavePayWebProtocol {
-    func tranasctionSuccessful(flwRef: String, responseData: [String: Any]?) {
+    func transactionSuccessful(flwRef: String, responseData: [String: Any]?) {
         self.dismiss(animated: true) {
-            self.delegate?.tranasctionSuccessful(flwRef: flwRef, responseData: responseData)
+            self.delegate?.transactionSuccessful(flwRef: flwRef, responseData: responseData)
         }
     }
 

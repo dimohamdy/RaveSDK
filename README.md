@@ -37,11 +37,11 @@ pod 'RaveSDK'
  import RaveSDK
 
  class ViewController: UIViewController ,RavePayProtocol {
-     func tranasctionSuccessful(flwRef: String?, responseData: [String : Any]?) {
+     func transactionSuccessful(flwRef: String?, responseData: [String : Any]?) {
          
      }
 
-     func tranasctionFailed(flwRef: String?, responseData: [String : Any]?) {
+     func transactionFailed(flwRef: String?, responseData: [String : Any]?) {
      
      }
 
