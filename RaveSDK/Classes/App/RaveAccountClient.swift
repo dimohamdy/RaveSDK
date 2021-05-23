@@ -8,7 +8,9 @@
 
 import Foundation
 import UIKit
+
 public class RaveAccountClient {
+
     public var amount: String?
     public var accountNumber: String?
     public var bankCode: String?
@@ -18,29 +20,34 @@ public class RaveAccountClient {
     public var isInternetBanking: Bool = false
     public var blacklistedBankCodes: [String]?
     public var isUSBankAccount =  false
-
-    public typealias BanksHandler = (([Bank]?) -> Void)
-    public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
-    public typealias FeeSuccessHandler = ((String?, String?) -> Void)
-    public typealias SuccessHandler = ((String?, [String: Any]?) -> Void)
-	public var banks: BanksHandler?
-	public var error: ErrorHandler?
-	public var validateError: ErrorHandler?
-	public var feeSuccess: FeeSuccessHandler?
-	public var chargeSuccess: SuccessHandler?
-    public typealias OTPAuthHandler = ((String, String) -> Void)
-    public typealias WebAuthHandler = ((String, String) -> Void)
-    public typealias GBPOTPAuthHandler = ((String, String, String) -> Void)
-    public var chargeOTPAuth: OTPAuthHandler?
-    public var redoChargeOTPAuth: OTPAuthHandler?
-	public var chargeGBPOTPAuth: GBPOTPAuthHandler?
-    public var chargeWebAuth: WebAuthHandler?
     public var otp: String?
     public var transactionReference: String?
     var txRef: String?
     var chargeAmount: String?
 
-	public init() {}
+    // MARK: Handlers
+    public var banks: BanksHandler?
+    public var error: ErrorHandler?
+    public var validateError: ErrorHandler?
+    public var feeSuccess: FeeSuccessHandler?
+    public var chargeSuccess: SuccessHandler?
+    public var chargeOTPAuth: OTPAuthHandler?
+    public var redoChargeOTPAuth: OTPAuthHandler?
+    public var chargeGBPOTPAuth: GBPOTPAuthHandler?
+    public var chargeWebAuth: WebAuthHandler?
+
+    // MARK: Typealias
+    public typealias BanksHandler = (([Bank]?) -> Void)
+    public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
+    public typealias FeeSuccessHandler = ((String?, String?) -> Void)
+    public typealias SuccessHandler = ((String?, [String: Any]?) -> Void)
+
+    public typealias OTPAuthHandler = ((String, String) -> Void)
+    public typealias WebAuthHandler = ((String, String) -> Void)
+    public typealias GBPOTPAuthHandler = ((String, String, String) -> Void)
+
+    public init() {}
+
     // MARK: Fee
     public func getFee() {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
@@ -106,6 +113,7 @@ public class RaveAccountClient {
         }
 
     }
+
     // MARK: Charge
     public func chargeAccount() {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
@@ -374,5 +382,4 @@ public class RaveAccountClient {
                })
            }
        }
-
 }
