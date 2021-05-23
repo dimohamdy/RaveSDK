@@ -78,40 +78,18 @@ public class RaveAccountClient {
 
     // MARK: Bank List
     public func getBanks() {
-        var banks: [Bank]? = []
         RavePayService.getBanks(resultCallback: { (_banks) in
             DispatchQueue.main.async {
-                var _thebanks: [Bank]? = _banks
-                if let count = self.blacklistedBankCodes?.count {
-                    if count > 0 {
-                        self.blacklistedBankCodes?.forEach({ (code) in
-                            _thebanks = _thebanks?.filter({ (bank) -> Bool in
-                                return  bank.bankCode! != code
-                            })
-                        })
-                        banks = _thebanks
-                        banks = banks?.sorted(by: { (first, second) -> Bool in
-                            return first.name!.localizedCaseInsensitiveCompare(second.name!) == .orderedAscending
-                        })
-                        self.banks?(banks)
-                    } else {
-                        banks = _banks?.sorted(by: { (first, second) -> Bool in
-                            return first.name!.localizedCaseInsensitiveCompare(second.name!) == .orderedAscending
-                        })
-                        self.banks?(banks)
-                    }
-                } else {
-                    banks = _banks?.sorted(by: { (first, second) -> Bool in
-                        return first.name!.localizedCaseInsensitiveCompare(second.name!) == .orderedAscending
-                    })
-                    self.banks?(banks)
-                }
+                let banks = _banks?.filter({ (bank) -> Bool in
+                    return self.blacklistedBankCodes?.contains(bank.bankCode!) ?? false
+                }).sorted(by: { (first, second) -> Bool in
+                    return first.name!.localizedCaseInsensitiveCompare(second.name!) == .orderedAscending
+                })
+                self.banks?(banks)
             }
-
         }) { (err) in
             print(err)
         }
-
     }
 
     // MARK: Charge
@@ -120,11 +98,11 @@ public class RaveAccountClient {
             let isInternetBanking = (self.isInternetBanking) == true ? 1 : 0
             var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case .KES, .TZS, .GHS, .KES, .ZAR:
-                           country = RaveConfig.sharedConfig().country
-                       default:
-                           country = "NG"
-                       }
+            case .KES, .TZS, .GHS, .ZAR:
+                country = RaveConfig.sharedConfig().country
+            default:
+                country = "NG"
+            }
             guard let _ = amount else {
                 fatalError("Amount is missing")
             }
@@ -177,7 +155,7 @@ public class RaveAccountClient {
                 param.merge(["meta": meta])
             }
             if isUSBankAccount {
-             param.merge(["is_us_bank_charge": "\(isUSBankAccount)"])
+                param.merge(["is_us_bank_charge": "\(isUSBankAccount)"])
             }
             if RaveConfig.sharedConfig().currencyCode == .GBP {
                 param.merge(["is_uk_bank_charge2": 1, "accountname": accountNumber])
@@ -230,43 +208,43 @@ public class RaveAccountClient {
                                 case "00":
                                     let data = result?["data"] as? [String: AnyObject]
                                     if let flwTransactionRef = data?["flw_reference"] as? String {
-                                       self.chargeSuccess?(flwTransactionRef, result)
+                                        self.chargeSuccess?(flwTransactionRef, result)
                                     }
                                 case "02":
-                                        let data = result?["data"] as? [String: AnyObject]
-                                        let paymentCode = data?["payment_code"] as? String
-                                        if let flwTransactionRef = data?["flw_reference"] as? String {
-                                            self.chargeGBPOTPAuth?(flwTransactionRef, paymentCode ?? "", "")
-                                            self.txRef = flwTransactionRef
-                                        }
+                                    let data = result?["data"] as? [String: AnyObject]
+                                    let paymentCode = data?["payment_code"] as? String
+                                    if let flwTransactionRef = data?["flw_reference"] as? String {
+                                        self.chargeGBPOTPAuth?(flwTransactionRef, paymentCode ?? "", "")
+                                        self.txRef = flwTransactionRef
+                                    }
                                 default:
                                     break
                                 }
                             }
                         } else {
-                        if let chargeResponse = result?["chargeResponseCode"] as? String {
-                            switch chargeResponse {
-                            case "00":
+                            if let chargeResponse = result?["chargeResponseCode"] as? String {
+                                switch chargeResponse {
+                                case "00":
 
-                                if let flwTransactionRef = result?["flwRef"] as? String {
-                                   self.chargeSuccess?(flwTransactionRef, result)
-                                }
+                                    if let flwTransactionRef = result?["flwRef"] as? String {
+                                        self.chargeSuccess?(flwTransactionRef, result)
+                                    }
 
-                            case "02":
-                                let flwTransactionRef = result?["flwRef"] as? String
-                                //chargeResponseMessage
-                                var _instruction: String? = result?["chargeResponseMessage"] as? String
-                                if let instruction = result?["validateInstruction"] as? String {
-                                    _instruction = instruction
-                                } else {
-                                    if let instruction = result?["validateInstructions"] as? [String: AnyObject] {
-                                        if let  _inst =  instruction["instruction"] as? String {
-                                            if _inst != ""{
-                                                _instruction = _inst
+                                case "02":
+                                    let flwTransactionRef = result?["flwRef"] as? String
+                                    //chargeResponseMessage
+                                    var _instruction: String? = result?["chargeResponseMessage"] as? String
+                                    if let instruction = result?["validateInstruction"] as? String {
+                                        _instruction = instruction
+                                    } else {
+                                        if let instruction = result?["validateInstructions"] as? [String: AnyObject] {
+                                            if let  _inst =  instruction["instruction"] as? String {
+                                                if _inst != ""{
+                                                    _instruction = _inst
+                                                }
                                             }
                                         }
                                     }
-                                }
                                     if let authURL = result?["authurl"] as? String, authURL != "NO-URL", authURL != "N/A"{
                                         self.chargeWebAuth?(flwTransactionRef!, authURL)
                                     } else {
@@ -274,10 +252,10 @@ public class RaveAccountClient {
                                             self.chargeOTPAuth?(flwRef, _instruction ?? "Pending OTP Validation")
                                         }
                                     }
-                            default:
-                                break
+                                default:
+                                    break
+                                }
                             }
-                         }
                         }
                     } else {
                         if let message = res?["message"] as? String {
@@ -319,12 +297,12 @@ public class RaveAccountClient {
                                             self.validateError?(message, data)
                                         }
                                     } else {
-                                            let message = data["chargeResponseMessage"] as? String
-                                            self.redoChargeOTPAuth?(flwRef, message ?? "Pending OTP Validation")
-                                    }
-                                } else {
                                         let message = data["chargeResponseMessage"] as? String
                                         self.redoChargeOTPAuth?(flwRef, message ?? "Pending OTP Validation")
+                                    }
+                                } else {
+                                    let message = data["chargeResponseMessage"] as? String
+                                    self.redoChargeOTPAuth?(flwRef, message ?? "Pending OTP Validation")
                                 }
                             } else {
                                 self.chargeSuccess?(flwRef, result)
@@ -334,8 +312,8 @@ public class RaveAccountClient {
 
                     }
                 } else {
-                        let message = res ["message"] as? String
-                        self.validateError?(message, res)
+                    let message = res ["message"] as? String
+                    self.validateError?(message, res)
                 }
             }
         }) { (err) in
@@ -347,39 +325,39 @@ public class RaveAccountClient {
         }
     }
 
-  public func queryTransaction(txRef: String?) {
-           if let secret = RaveConfig.sharedConfig().publicKey, let  ref = txRef {
-               let param = ["PBFPubKey": secret, "flw_ref": ref]
-               RavePayService.mpesaQueryTransaction(param, resultCallback: { (result) in
-                   if let  status = result?["status"] as? String {
-                       if status == "success" {
-                           if let data = result?["data"] as? [String: AnyObject] {
-                               let flwRef = data["flwref"] as? String
-                               if let chargeCode = data["chargeResponseCode"] as?  String {
-                                   switch chargeCode {
-                                   case "00":
-                                       self.chargeSuccess?(flwRef, result)
+    public func queryTransaction(txRef: String?) {
+        if let secret = RaveConfig.sharedConfig().publicKey, let  ref = txRef {
+            let param = ["PBFPubKey": secret, "flw_ref": ref]
+            RavePayService.mpesaQueryTransaction(param, resultCallback: { (result) in
+                if let  status = result?["status"] as? String {
+                    if status == "success" {
+                        if let data = result?["data"] as? [String: AnyObject] {
+                            let flwRef = data["flwref"] as? String
+                            if let chargeCode = data["chargeResponseCode"] as?  String {
+                                switch chargeCode {
+                                case "00":
+                                    self.chargeSuccess?(flwRef, result)
 
-                                   default:
-                                       self.queryTransaction(txRef: ref)
-                                   }
-                               } else {
-                                   self.queryTransaction(txRef: ref)
-                               }
-                           }
-                       } else {
-                               self.error?("Something went wrong please try again.", nil)
-                       }
-                   }
-               }, errorCallback: { (err) in
+                                default:
+                                    self.queryTransaction(txRef: ref)
+                                }
+                            } else {
+                                self.queryTransaction(txRef: ref)
+                            }
+                        }
+                    } else {
+                        self.error?("Something went wrong please try again.", nil)
+                    }
+                }
+            }, errorCallback: { (err) in
 
-                   if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
-                        self.error?("Request Timed Out", nil)
-                   } else {
-                       self.error?(err, nil)
-                   }
+                if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
+                    self.error?("Request Timed Out", nil)
+                } else {
+                    self.error?(err, nil)
+                }
 
-               })
-           }
-       }
+            })
+        }
+    }
 }
