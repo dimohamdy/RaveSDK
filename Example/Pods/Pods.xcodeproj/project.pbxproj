@@ -14,6 +14,8 @@
 		027849A9363C62140BAACDF20FA52623 /* UKAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C369B7E347A54BEF85E2FFB1AFBF27C /* UKAccountView.swift */; };
 		0368A1A567BF145C96D38B88591B67E8 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46CC887D17A35E1BF163AF67368F24F /* ColorExtension.swift */; };
 		03CC37128FAADD76A275A38703821E73 /* UKAccountDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF34E6B19F7EC4DADEB1115C86F57B12 /* UKAccountDetailsView.swift */; };
+		04829091265B28FF00EA3730 /* FWResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482908F265B28FE00EA3730 /* FWResult.swift */; };
+		04829092265B28FF00EA3730 /* Fee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04829090265B28FF00EA3730 /* Fee.swift */; };
 		049208BE485227C4A0DE6B9E7A69E8CB /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFCAA458075575810EDB362E086FD45 /* GroupNode.swift */; };
 		04CB4C7420F2A2C9C735C1CE501A4F3B /* AnimatedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A2C595C7662C4072EBF497118A88D6 /* AnimatedControl.swift */; };
 		0564E54A6F03094F6F39F7D2325CE0D5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D34FFC859B63A4B7CA5CA9F3AABBD7DF /* CoreGraphics.framework */; };
@@ -391,6 +393,8 @@
 		0159B70A26EE587CBE43BDA4B1CF07B5 /* CompositionLayersInitializer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CompositionLayersInitializer.swift; path = "lottie-swift/src/Private/LayerContainers/Utility/CompositionLayersInitializer.swift"; sourceTree = "<group>"; };
 		017CC632D6E7579CAA7D134DEA2CD5BC /* Loader_YB.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = Loader_YB.json; path = RaveSDK/Assets/Loader_YB.json; sourceTree = "<group>"; };
 		039B4CDB97128E64547F4A2CFEBA45B9 /* Pods_RaveSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RaveSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0482908F265B28FE00EA3730 /* FWResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FWResult.swift; sourceTree = "<group>"; };
+		04829090265B28FF00EA3730 /* Fee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fee.swift; sourceTree = "<group>"; };
 		05360C4D9C63495BDB4D49547DFFF5E9 /* ImageCompositionLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageCompositionLayer.swift; path = "lottie-swift/src/Private/LayerContainers/CompLayers/ImageCompositionLayer.swift"; sourceTree = "<group>"; };
 		0601A7640560895A0133C75B9EC8BF7E /* AnimationPublic.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnimationPublic.swift; path = "lottie-swift/src/Public/Animation/AnimationPublic.swift"; sourceTree = "<group>"; };
 		06C5A1A43D274397631268B9A038C7C8 /* RaveAccountClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RaveAccountClient.swift; sourceTree = "<group>"; };
@@ -897,6 +901,8 @@
 			children = (
 				89F5BCBFFC7BFD812B001EFDF4F96339 /* Bank.swift */,
 				FC509E0B289931BB8D28897A235D1F05 /* SavedCard.swift */,
+				04829090265B28FF00EA3730 /* Fee.swift */,
+				0482908F265B28FE00EA3730 /* FWResult.swift */,
 			);
 			name = Model;
 			path = RaveSDK/Classes/Model;
@@ -1800,6 +1806,7 @@
 				AC4430A2AD261EA3FF5D50C6EB3B53F7 /* MobileMoneyGHPendingView.swift in Sources */,
 				4E3A5C655C03B7211DD3759C466DB551 /* MobileMoneyGHView.swift in Sources */,
 				28A4FE87CFE9086A4989CB58E01E6BB2 /* MobileMoneyRW.swift in Sources */,
+				04829092265B28FF00EA3730 /* Fee.swift in Sources */,
 				280D779B6989A701673E9CDFA444F38D /* MobileMoneyUganda.swift in Sources */,
 				FE366E19521DE9A5748F1EBBFBC36E23 /* MobileMoneyZM.swift in Sources */,
 				EFFEB54CF0FE90FB87178C4A6962090A /* MPesaBusinessView.swift in Sources */,
@@ -1827,6 +1834,7 @@
 				5AC93AF8FD1A624CDEF7F4167BA6957B /* SavedCardsView.swift in Sources */,
 				B49D19C5718BDEE880FE408ADFFE2D58 /* SelectBankAccountView.swift in Sources */,
 				271AFD4AA0BCA8EC2DBE75C8B422D6FD /* SnackBar.swift in Sources */,
+				04829091265B28FF00EA3730 /* FWResult.swift in Sources */,
 				0A33D100CB1B15E40BC92847CF2E2731 /* TripleDES.swift in Sources */,
 				03CC37128FAADD76A275A38703821E73 /* UKAccountDetailsView.swift in Sources */,
 				027849A9363C62140BAACDF20FA52623 /* UKAccountView.swift in Sources */,

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class RaveCardClient {
+public class RaveCardClient: GetFee {
     public var cardNumber: String?
     public var cardfirst6: String?
     public var cvv: String?
@@ -27,6 +27,7 @@ public class RaveCardClient {
     public var transactionReference: String?
     public var bodyParam: [String: Any]? = [:]
 
+    // MARK: Typealias
     public typealias FeeSuccessHandler = ((String?, String?) -> Void)
     public typealias SuccessHandler = ((String?, [String: Any]?) -> Void)
     public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
@@ -38,19 +39,20 @@ public class RaveCardClient {
     public typealias RemoveSavedCardSuccessHandler = (() -> Void)
     public typealias RemoveSavedCardErrorHandler = ((String?) -> Void)
 
-	public var error: ErrorHandler?
-	public var saveCardError: SaveCardErrorHandler?
-	public var saveCardSuccess: SaveCardSuccessHandler?
-	public var removesavedCardError: RemoveSavedCardErrorHandler?
-	public var removesavedCardSuccess: RemoveSavedCardSuccessHandler?
-	public var validateError: ErrorHandler?
-	public var feeSuccess: FeeSuccessHandler?
-	public var chargeSuggestedAuth: SuggestedAuthHandler?
-	public var chargeOTPAuth: OTPAuthHandler?
-	public var chargeWebAuth: WebAuthHandler?
-	public var chargeSuccess: SuccessHandler?
-	public var sendOTPSuccess: SaveCardErrorHandler?
-	public var sendOTPError: SaveCardErrorHandler?
+    // MARK: Handler
+	public var errorHandler: ErrorHandler?
+	public var saveCardErrorHandler: SaveCardErrorHandler?
+	public var saveCardSuccessHandler: SaveCardSuccessHandler?
+	public var removesavedCardErrorHandler: RemoveSavedCardErrorHandler?
+	public var removesavedCardSuccessHandler: RemoveSavedCardSuccessHandler?
+	public var validateErrorHandler: ErrorHandler?
+	public var feeSuccessHandler: FeeSuccessHandler?
+	public var chargeSuggestedAuthHandler: SuggestedAuthHandler?
+	public var chargeOTPAuthHandler: OTPAuthHandler?
+	public var chargeWebAuthHandler: WebAuthHandler?
+	public var chargeSuccessHandler: SuccessHandler?
+	public var sendOTPSuccessHandler: SaveCardErrorHandler?
+	public var sendOTPErrorHandler: SaveCardErrorHandler?
 	public var selectedCard: SavedCard?
 
     private var isRetryCharge = false
@@ -60,31 +62,17 @@ public class RaveCardClient {
 
     // MARK: Transaction Fee
     public func getFee() {
-        if let pubkey = RaveConfig.sharedConfig().publicKey {
-            let param = [
+        guard let pubkey = RaveConfig.sharedConfig().publicKey else {
+            self.errorHandler?("Public Key is not specified", nil)
+            return
+        }
+        let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
                 "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "card6": cardfirst6!]
-                RavePayService.getFee(param, resultCallback: {[weak self] (result) in
-                guard let strongSelf = self else {return}
-                let data = result?["data"] as? [String: AnyObject]
-                    if let _fee =  data?["fee"] as? Double {
-                        let fee = "\(_fee)"
-                        let chargeAmount = data?["charge_amount"] as? String
-                            strongSelf.feeSuccess?(fee, chargeAmount)
-                        } else {
-                            if let err = result?["message"] as? String {
-                             strongSelf.error?(err, nil)
-                            }
-                    }
-                }, errorCallback: {[weak self] (err) in
-                guard let strongSelf = self else {return}
-                strongSelf.error?(err, nil)
-            })
-        } else {
-            self.error?("Public Key is not specified", nil)
-        }
+
+        getFee(param: param, feeSuccessHandler: feeSuccessHandler, errorHandler: errorHandler)
     }
 
     // MARK: Charge Saved Card
@@ -92,7 +80,7 @@ public class RaveCardClient {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
             var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case .KES, .TZS, .GHS, .KES, .ZAR:
+                       case .KES, .TZS, .GHS, .ZAR:
                            country = RaveConfig.sharedConfig().country
                        default:
                            country = "NG"
@@ -194,14 +182,14 @@ public class RaveCardClient {
                                 authModel = .NONE
                             }
                             let authURL = result?["authurl"] as? String
-                            strongSelf.chargeSuggestedAuth?(authModel, result!, authURL)
+                            strongSelf.chargeSuggestedAuthHandler?(authModel, result!, authURL)
 
                         } else {
                             if let chargeResponse = result?["chargeResponseCode"] as? String {
                                 switch chargeResponse {
                                 case "00":
                                     let flwTransactionRef = result?["flwRef"] as? String
-                                    strongSelf.chargeSuccess?(flwTransactionRef, result)
+                                    strongSelf.chargeSuccessHandler?(flwTransactionRef, result)
                                 case "02":
                                     let flwTransactionRef = result?["flwRef"] as? String
                                     var _instruction: String? =  result?["chargeResponseMessage"] as? String
@@ -218,11 +206,11 @@ public class RaveCardClient {
                                     }
                                     if let authURL = result?["authurl"] as? String, authURL != "NO-URL", authURL != "N/A" {
                                         // Show Web View
-                                        strongSelf.chargeWebAuth?(flwTransactionRef!, authURL)
+                                        strongSelf.chargeWebAuthHandler?(flwTransactionRef!, authURL)
                                     } else {
                                         if let flwRef = flwTransactionRef {
                                             // Show OTP Screen
-                                            strongSelf.chargeOTPAuth?(flwRef, _instruction ?? "Pending OTP Validation")
+                                            strongSelf.chargeOTPAuthHandler?(flwRef, _instruction ?? "Pending OTP Validation")
                                         }
                                     }
                                 default:
@@ -233,13 +221,13 @@ public class RaveCardClient {
                         }
                     } else {
                         if let message = res?["message"] as? String {
-                            strongSelf.error?(message, nil)
+                            strongSelf.errorHandler?(message, nil)
                         }
                     }
                 }
             }) {[weak self] (err) in
                 guard let strongSelf = self else {return}
-                strongSelf.error?(err, nil)
+                strongSelf.errorHandler?(err, nil)
             }
         }
     }
@@ -248,7 +236,7 @@ public class RaveCardClient {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
             var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
-                       case .KES, .TZS, .GHS, .KES, .ZAR:
+                       case .KES, .TZS, .GHS, .ZAR:
                            country = RaveConfig.sharedConfig().country
                        default:
                            country = "NG"
@@ -371,14 +359,14 @@ public class RaveCardClient {
                                 authModel = .NONE
                             }
                             let authURL = result?["authurl"] as? String
-                            strongSelf.chargeSuggestedAuth?(authModel, result!, authURL)
+                            strongSelf.chargeSuggestedAuthHandler?(authModel, result!, authURL)
 
                         } else {
                             if let chargeResponse = result?["chargeResponseCode"] as? String {
                                 switch chargeResponse {
                                 case "00":
                                     let flwTransactionRef = result?["flwRef"] as? String
-                                    strongSelf.chargeSuccess?(flwTransactionRef, result)
+                                    strongSelf.chargeSuccessHandler?(flwTransactionRef, result)
                                 case "02":
                                     let flwTransactionRef = result?["flwRef"] as? String
                                     var _instruction: String? =  result?["chargeResponseMessage"] as? String
@@ -395,11 +383,11 @@ public class RaveCardClient {
                                     }
                                     if let authURL = result?["authurl"] as? String, authURL != "NO-URL", authURL != "N/A" {
                                           // Show Web View
-                                          strongSelf.chargeWebAuth?(flwTransactionRef!, authURL)
+                                          strongSelf.chargeWebAuthHandler?(flwTransactionRef!, authURL)
                                     } else {
                                         if let flwRef = flwTransactionRef {
                                           // Show OTP Screen
-                                            strongSelf.chargeOTPAuth?(flwRef, _instruction ?? "Pending OTP Validation")
+                                            strongSelf.chargeOTPAuthHandler?(flwRef, _instruction ?? "Pending OTP Validation")
                                         }
                                     }
                                 default:
@@ -410,24 +398,24 @@ public class RaveCardClient {
                         }
                     } else {
                         if let message = res?["message"] as? String {
-                            strongSelf.error?(message, res)
+                            strongSelf.errorHandler?(message, res)
                         }
                     }
                 }
             }) {[weak self] (err) in
                 guard let strongSelf = self else {return}
-                 strongSelf.error?(err, nil)
+                 strongSelf.errorHandler?(err, nil)
             }
 
         } else {
-           self.error?("Public Key is not specified", nil)
+           self.errorHandler?("Public Key is not specified", nil)
         }
     }
 
     // MARK: Validate Card
     public func validateCardOTP() {
         guard let ref = self.transactionReference, let _otp = otp else {
-            self.error?("Transaction Reference  or OTP is not set", nil)
+            self.errorHandler?("Transaction Reference  or OTP is not set", nil)
             return
         }
         let reqbody = [
@@ -446,11 +434,11 @@ public class RaveCardClient {
                                     if responseCode == "00"{
                                         if let tx = data["tx"] as? [String: AnyObject] {
                                             if let ref = tx["flwRef"] as? String {
-                                                self.chargeSuccess?(ref, data)
+                                                self.chargeSuccessHandler?(ref, data)
                                             }
                                         } else {
                                             let message = res ["message"] as? String
-                                            self.validateError?(message, data)
+                                            self.validateErrorHandler?(message, data)
 
                                         }
                                     } else {
@@ -462,7 +450,7 @@ public class RaveCardClient {
                                                 self.chargeCard()
                                             } else {
                                                 let message = res ["message"] as? String
-                                                self.validateError?(message, data)
+                                                self.validateErrorHandler?(message, data)
                                             }
                                         }
                                     }
@@ -472,20 +460,20 @@ public class RaveCardClient {
                         }
                     } else {
                         let message = res ["message"] as? String
-                        self.validateError?(message, nil)
+                        self.validateErrorHandler?(message, nil)
 
                     }
                 } else {
                         let message = res ["message"] as? String
-                        self.validateError?(message, nil)
+                        self.validateErrorHandler?(message, nil)
                 }
 
             }
         }) { (err) in
             if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
-                 self.validateError?("Request Timed Out", nil)
+                 self.validateErrorHandler?("Request Timed Out", nil)
             } else {
-                self.validateError?(err, nil)
+                self.validateErrorHandler?(err, nil)
             }
         }
     }
@@ -498,10 +486,10 @@ public class RaveCardClient {
 
                 RavePayService.getSavedCards(param, resultCallback: {[weak self] (cardResponse) in
                     guard let  strongSelf = self else { return}
-                    strongSelf.saveCardSuccess?(cardResponse.cards)
+                    strongSelf.saveCardSuccessHandler?(cardResponse.cards)
                 }) {[weak self] (err) in
                     guard let  strongSelf = self else { return}
-                    strongSelf.saveCardError?(err)
+                    strongSelf.saveCardErrorHandler?(err)
                 }
             }
 
@@ -516,13 +504,13 @@ public class RaveCardClient {
                 "mobile_number": savedCardMobileNumber!]
             RavePayService.removeSavedCard(param, resultCallback: {[weak self] (_) in
                 guard let strongSelf = self else {return}
-                    strongSelf.removesavedCardSuccess?()
+                    strongSelf.removesavedCardSuccessHandler?()
                 }, errorCallback: {[weak self] (err) in
                     guard let strongSelf = self else {return}
-                    strongSelf.removesavedCardError?(err)
+                    strongSelf.removesavedCardErrorHandler?(err)
             })
         } else {
-            self.removesavedCardError?("Public Key is not specified")
+            self.removesavedCardErrorHandler?("Public Key is not specified")
         }
     }
 
@@ -532,10 +520,10 @@ public class RaveCardClient {
             let param = ["public_key": pubkey, "card_hash": card.cardHash ?? "", "device_key": card.mobileNumber ?? ""]
             RavePayService.sendOTP(param, resultCallback: {[weak self] (message) in
                 guard let  strongSelf = self else { return}
-                strongSelf.sendOTPSuccess?(message)
+                strongSelf.sendOTPSuccessHandler?(message)
             }) {[weak self] (err) in
                 guard let  strongSelf = self else { return}
-                strongSelf.sendOTPError?(err)
+                strongSelf.sendOTPErrorHandler?(err)
             }
         }
      }

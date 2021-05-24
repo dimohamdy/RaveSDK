@@ -17,24 +17,29 @@ public enum MobileMoneyType {
     case franco
 }
 
-public class RaveMobileMoneyClient {
+public class RaveMobileMoneyClient: GetFee {
     public var amount: String?
     public var phoneNumber: String?
     public var email: String? = ""
     public var voucher: String?
     public var network: String?
     public var selectedMobileNetwork: String?
+
+    // MARK: Typealias
     public typealias FeeSuccessHandler = ((String?, String?) -> Void)
     public typealias PendingHandler = ((String?, String?) -> Void)
     public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
     public typealias SuccessHandler = ((String?, [String: Any]?) -> Void)
     public typealias WebAuthHandler = ((String, String) -> Void)
-	public var error: ErrorHandler?
-	public var feeSuccess: FeeSuccessHandler?
-	public var transactionReference: String?
-	public var chargeSuccess: SuccessHandler?
-	public var chargePending: PendingHandler?
-	public var chargeWebAuth: WebAuthHandler?
+
+    // MARK: Handler
+	public var errorHandler: ErrorHandler?
+	public var feeSuccessHandler: FeeSuccessHandler?
+	public var chargeSuccessHandler: SuccessHandler?
+	public var chargePendingHandler: PendingHandler?
+	public var chargeWebAuthHandler: WebAuthHandler?
+
+    public var transactionReference: String?
 	public var mobileMoneyType: MobileMoneyType = .ghana
 
 	public init() {}
@@ -44,30 +49,18 @@ public class RaveMobileMoneyClient {
         if RaveConfig.sharedConfig().currencyCode == .GHS || RaveConfig.sharedConfig().currencyCode == .UGX
             || RaveConfig.sharedConfig().currencyCode == .RWF || RaveConfig.sharedConfig().currencyCode == .XAF
             || RaveConfig.sharedConfig().currencyCode == .XOF || RaveConfig.sharedConfig().currencyCode == .ZMW {
-        if let pubkey = RaveConfig.sharedConfig().publicKey {
+            guard let pubkey = RaveConfig.sharedConfig().publicKey else {
+                self.errorHandler?("Public Key is not specified", nil)
+                return
+            }
+
             let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
                 "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "ptype": "2"]
-            RavePayService.getFee(param, resultCallback: { (result) in
-                let data = result?["data"] as? [String: AnyObject]
-                if let _fee =  data?["fee"] as? Double {
-                    let fee = "\(_fee)"
-                    let chargeAmount = data?["charge_amount"] as? String
-                    self.feeSuccess?(fee, chargeAmount)
-                } else {
-                    if let err = result?["message"] as? String {
-                        self.error?(err, nil)
-                    }
-                }
-            }, errorCallback: { (err) in
 
-                self.error?(err, nil)
-            })
-        } else {
-            self.error?("Public Key is not specified", nil)
-        }
+            getFee(param: param, feeSuccessHandler: feeSuccessHandler, errorHandler: errorHandler)
         }
     }
 
@@ -75,7 +68,7 @@ public class RaveMobileMoneyClient {
     public func chargeMobileMoney(_ type: MobileMoneyType = .ghana) {
         var country: String = ""
         switch RaveConfig.sharedConfig().currencyCode {
-                   case .KES, .TZS, .GHS, .KES, .ZAR:
+                   case .KES, .TZS, .GHS, .ZAR:
                        country = RaveConfig.sharedConfig().country
                    default:
                        country = "NG"
@@ -156,19 +149,19 @@ public class RaveMobileMoneyClient {
 						let result = res?["data"] as? [String: AnyObject]
 						if let code = result?["code"] as? String, code == "02"{
 							if let authURL = result?["link"] as? String {
-								self.chargeWebAuth?("", authURL)
+								self.chargeWebAuthHandler?("", authURL)
 							}
 						} else {
 							let flwTransactionRef = result?["flwRef"] as? String
 							if let chargeResponse = result?["chargeResponseCode"] as? String {
 								switch chargeResponse {
 								case "00":
-									self.chargeSuccess?(flwTransactionRef!, res)
+									self.chargeSuccessHandler?(flwTransactionRef!, res)
 
 								case "02":
 									if let authURL = result?["authurl"] as? String, authURL != "NO-URL", authURL != "N/A" {
 										// Show Web View
-										self.chargeWebAuth?(flwTransactionRef!, authURL)
+										self.chargeWebAuthHandler?(flwTransactionRef!, authURL)
 										if let txRef = result?["flwRef"] as? String {
 											self.queryMpesaTransaction(txRef: txRef)
 										}
@@ -181,7 +174,7 @@ public class RaveMobileMoneyClient {
 												if let status =  result?["status"] as? String {
 													if status.containsIgnoringCase(find: "pending") {
 
-														self.chargePending?("Transaction Processing", "A push notification has been sent to your phone, please complete the transaction by entering your pin.\n Please do not close this page until transaction is completed")
+														self.chargePendingHandler?("Transaction Processing", "A push notification has been sent to your phone, please complete the transaction by entering your pin.\n Please do not close this page until transaction is completed")
 														if let txRef = result?["flwRef"] as? String {
 															self.queryMpesaTransaction(txRef: txRef)
 														}
@@ -200,14 +193,14 @@ public class RaveMobileMoneyClient {
                     } else {
                         if let message = res?["message"] as? String {
                             print(message)
-                            self.error?(message, res)
+                            self.errorHandler?(message, res)
                         }
                     }
                 }
 
             }, errorCallback: { (err) in
 
-                self.error?(err, nil)
+                self.errorHandler?(err, nil)
             })
 
         }
@@ -226,7 +219,7 @@ public class RaveMobileMoneyClient {
                             if let chargeCode = data["chargeResponseCode"] as?  String {
                                 switch chargeCode {
                                 case "00":
-                                    self.chargeSuccess?(flwRef, result)
+                                    self.chargeSuccessHandler?(flwRef, result)
 
                                 default:
                                     self.queryMpesaTransaction(txRef: ref)
@@ -236,15 +229,15 @@ public class RaveMobileMoneyClient {
                             }
                         }
                     } else {
-                        self.error?(message, nil)
+                        self.errorHandler?(message, nil)
                     }
                 }
             }, errorCallback: { (err) in
 
                 if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
-                    self.error?("Request Timed Out", nil)
+                    self.errorHandler?("Request Timed Out", nil)
                 } else {
-                    self.error?(err, nil)
+                    self.errorHandler?(err, nil)
                 }
 
             })

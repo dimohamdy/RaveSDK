@@ -1105,7 +1105,7 @@ public class NewRavePayViewController: UITableViewController {
                 raveCardClient.fetchSavedCards()
             }
         }
-        raveCardClient.sendOTPSuccess = { [weak self](message) in
+        raveCardClient.sendOTPSuccessHandler = { [weak self](message) in
             guard let strongSelf = self else {
                 return
             }
@@ -1114,7 +1114,7 @@ public class NewRavePayViewController: UITableViewController {
                 strongSelf.showOTP(message: message ?? "Enter the OTP sent to your mobile phone and email address to continue", flwRef: "", otpType: .savedCard)
             }
         }
-        raveCardClient.sendOTPError = {(message) in
+        raveCardClient.sendOTPErrorHandler = {(message) in
 
             DispatchQueue.main.async {
                 LoadingHUD.shared().hide()
@@ -1122,7 +1122,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveCardClient.saveCardSuccess = {[weak self](saveCards) in
+        raveCardClient.saveCardSuccessHandler  = {[weak self](saveCards) in
             guard let strongSelf = self else {
                 return
             }
@@ -1138,7 +1138,7 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveCardClient.saveCardError = {[weak self](saveCards) in
+        raveCardClient.saveCardErrorHandler  = {[weak self](saveCards) in
             guard let strongSelf = self else {
                 return
             }
@@ -1152,7 +1152,7 @@ public class NewRavePayViewController: UITableViewController {
 
     func gbpAccountCallbacks() {
               raveUKAccountClient.transactionReference = RaveConfig.sharedConfig().transcationRef
-              raveUKAccountClient.feeSuccess = {[weak self](fee, chargeAmount) in
+              raveUKAccountClient.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
                   if let amount = chargeAmount, amount != "" {
                       DispatchQueue.main.async {
                        self?.ukViewContainer.accountPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1160,27 +1160,27 @@ public class NewRavePayViewController: UITableViewController {
                   }
               }
 
-              raveUKAccountClient.chargeSuccess = {[weak self](flwRef, data) in
+              raveUKAccountClient.chargeSuccessHandler  = {[weak self](flwRef, data) in
                    LoadingHUD.shared().hide()
                   self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
                   self?.dismiss(animated: true)
               }
 
-              raveUKAccountClient.chargeGBPOTPAuth = {[weak self](flwRef, reference, message) in
+              raveUKAccountClient.chargeGBPOTPAuthHandler  = {[weak self](flwRef, reference, message) in
                    LoadingHUD.shared().hide()
                   self?.showGBPBankDetails(reference)
               }
 
-              raveUKAccountClient.redoChargeOTPAuth = {[weak self](flwRef, message) in
+              raveUKAccountClient.redoChargeOTPAuthHandler  = {[weak self](flwRef, message) in
                    LoadingHUD.shared().hide()
                   self?.showOTP(message: message, flwRef: flwRef, otpType: .bank)
               }
 
-              raveUKAccountClient.chargeWebAuth = {[weak self](flwRef, authURL) in
+              raveUKAccountClient.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
                    LoadingHUD.shared().hide()
                   self?.showWebView(url: authURL, ref: flwRef)
               }
-              raveUKAccountClient.validateError = {[weak self](message, data) in
+              raveUKAccountClient.validateErrorHandler  = {[weak self](message, data) in
                    LoadingHUD.shared().hide()
                   //Still show success
                   if let _data  = data {
@@ -1195,7 +1195,7 @@ public class NewRavePayViewController: UITableViewController {
                   }
                   self?.dismiss(animated: true)
               }
-              raveUKAccountClient.error = {(message, data) in
+              raveUKAccountClient.errorHandler  = {(message, data) in
                    LoadingHUD.shared().hide()
                   DispatchQueue.main.async {
                       if let msg = message {
@@ -1227,7 +1227,7 @@ public class NewRavePayViewController: UITableViewController {
     }
     func accountCallbacks() {
         raveAccountClient.transactionReference = RaveConfig.sharedConfig().transcationRef
-        raveAccountClient.banks = {[weak self](banks) in
+        raveAccountClient.banksHandler  = {[weak self](banks) in
             if let whitelistedBanks = RaveConfig.sharedConfig().whiteListedBanksOnly {
                 var _banks: [Bank] =  []
                 whitelistedBanks.forEach({ (code) in
@@ -1250,7 +1250,7 @@ public class NewRavePayViewController: UITableViewController {
                 self?.bankPicker.reloadAllComponents()
             }
         }
-        raveAccountClient.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveAccountClient.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.accountFormContainer.accountPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1258,27 +1258,27 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveAccountClient.chargeSuccess = {[weak self](flwRef, data) in
+        raveAccountClient.chargeSuccessHandler  = {[weak self](flwRef, data) in
             LoadingHUD.shared().hide()
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
 
-        raveAccountClient.chargeOTPAuth = {[weak self](flwRef, message) in
+        raveAccountClient.chargeOTPAuthHandler  = {[weak self](flwRef, message) in
             LoadingHUD.shared().hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .bank)
         }
 
-        raveAccountClient.redoChargeOTPAuth = {[weak self](flwRef, message) in
+        raveAccountClient.redoChargeOTPAuthHandler  = {[weak self](flwRef, message) in
             LoadingHUD.shared().hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .bank)
         }
 
-        raveAccountClient.chargeWebAuth = {[weak self](flwRef, authURL) in
+        raveAccountClient.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
             LoadingHUD.shared().hide()
             self?.showWebView(url: authURL, ref: flwRef)
         }
-        raveAccountClient.validateError = {[weak self](message, data) in
+        raveAccountClient.validateErrorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             //Still show success
             if let _data  = data {
@@ -1293,7 +1293,7 @@ public class NewRavePayViewController: UITableViewController {
             }
             self?.dismiss(animated: true)
         }
-        raveAccountClient.error = {(message, data) in
+        raveAccountClient.errorHandler  = {(message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1311,12 +1311,12 @@ public class NewRavePayViewController: UITableViewController {
     func cardCallbacks() {
         raveCardClient.transactionReference = RaveConfig.sharedConfig().transcationRef
 
-        raveCardClient.chargeSuccess = {[weak self](flwRef, data) in
+        raveCardClient.chargeSuccessHandler  = {[weak self](flwRef, data) in
             LoadingHUD.shared().hide()
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveCardClient.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveCardClient.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.debitCardView.cardPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1324,7 +1324,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveCardClient.chargeSuggestedAuth = {[weak self](authModel, data, authURL) in
+        raveCardClient.chargeSuggestedAuthHandler  = {[weak self](authModel, data, authURL) in
             LoadingHUD.shared().hide()
             switch authModel {
             case .AVS_VBVSECURECODE:
@@ -1347,7 +1347,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveCardClient.error = {(message, data) in
+        raveCardClient.errorHandler  = {(message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1360,16 +1360,16 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveCardClient.chargeOTPAuth = {[weak self](flwRef, message) in
+        raveCardClient.chargeOTPAuthHandler  = {[weak self](flwRef, message) in
             LoadingHUD.shared().hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .card)
         }
 
-        raveCardClient.chargeWebAuth = {[weak self](flwRef, authURL) in
+        raveCardClient.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
             LoadingHUD.shared().hide()
             self?.showWebView(url: authURL, ref: flwRef)
         }
-        raveCardClient.validateError = {[weak self](message, data) in
+        raveCardClient.validateErrorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             if let _data  = data {
                 let tx = _data["tx"] as? [String: AnyObject]
@@ -1388,7 +1388,7 @@ public class NewRavePayViewController: UITableViewController {
     }
 
     func mpesaCallbacks() {
-        raveMpesaClient.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveMpesaClient.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.mpesaView.mpesaPayButton.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1396,7 +1396,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveMpesaClient.chargePending = {[weak self] (title, message) in
+        raveMpesaClient.chargePendingHandler  = {[weak self] (title, message) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 guard let strongSelf = self else { return}
@@ -1405,11 +1405,11 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveMpesaClient.chargeSuccess = {[weak self](flwRef, data) in
+        raveMpesaClient.chargeSuccessHandler  = {[weak self](flwRef, data) in
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveMpesaClient.error = {[weak self](message, data) in
+        raveMpesaClient.errorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1461,7 +1461,7 @@ public class NewRavePayViewController: UITableViewController {
         }
     }
     func mobileMoneyZambiaCallbacks() {
-        raveMobileMoneyZM.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveMobileMoneyZM.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.mobileMoneyZMContentContainer.mobileMoneyPay.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1469,7 +1469,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveMobileMoneyZM.chargePending = {[weak self] (title, message) in
+        raveMobileMoneyZM.chargePendingHandler  = {[weak self] (title, message) in
 
             DispatchQueue.main.async {
                  LoadingHUD.shared().hide()
@@ -1477,15 +1477,15 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveMobileMoneyZM.chargeWebAuth = {[weak self](flwRef, authURL) in
+        raveMobileMoneyZM.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
             LoadingHUD.shared().hide()
             self?.showWebView(url: authURL, ref: flwRef)
         }
-        raveMobileMoneyZM.chargeSuccess = {[weak self](flwRef, data) in
+        raveMobileMoneyZM.chargeSuccessHandler  = {[weak self](flwRef, data) in
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveMobileMoneyZM.error = {[weak self](message, data) in
+        raveMobileMoneyZM.errorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1506,7 +1506,7 @@ public class NewRavePayViewController: UITableViewController {
 
     }
     func mobileMoneyFrancoCallbacks() {
-        raveMobileMoneyFR.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveMobileMoneyFR.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.mobileMoneyFRContentContainer.mobileMoneyFRPayButton .setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1514,7 +1514,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveMobileMoneyFR.chargePending = {[weak self] (title, message) in
+        raveMobileMoneyFR.chargePendingHandler  = {[weak self] (title, message) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
 
@@ -1522,15 +1522,15 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveMobileMoneyFR.chargeWebAuth = {[weak self](flwRef, authURL) in
+        raveMobileMoneyFR.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
             LoadingHUD.shared().hide()
             self?.showWebView(url: authURL, ref: flwRef)
         }
-        raveMobileMoneyFR.chargeSuccess = {[weak self](flwRef, data) in
+        raveMobileMoneyFR.chargeSuccessHandler  = {[weak self](flwRef, data) in
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveMobileMoneyFR.error = {[weak self](message, data) in
+        raveMobileMoneyFR.errorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1552,18 +1552,18 @@ public class NewRavePayViewController: UITableViewController {
     }
 
     func mobileMoneyRwandaCallbacks() {
-        raveMobileMoneyRW.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveMobileMoneyRW.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.mobileMoneyRWContentContainer.mobileMoneyRWPayButton .setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
                 }
             }
         }
-        raveMobileMoneyRW.chargeWebAuth = {[weak self](flwRef, authURL) in
+        raveMobileMoneyRW.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
             LoadingHUD.shared().hide()
             self?.showWebView(url: authURL, ref: flwRef)
         }
-        raveMobileMoneyRW.chargePending = {[weak self] (title, message) in
+        raveMobileMoneyRW.chargePendingHandler  = {[weak self] (title, message) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
 
@@ -1571,11 +1571,11 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveMobileMoneyRW.chargeSuccess = {[weak self](flwRef, data) in
+        raveMobileMoneyRW.chargeSuccessHandler  = {[weak self](flwRef, data) in
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveMobileMoneyRW.error = {[weak self](message, data) in
+        raveMobileMoneyRW.errorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1597,7 +1597,7 @@ public class NewRavePayViewController: UITableViewController {
     }
 
     func mobileMobileUgandaCallbacks() {
-        raveMobileMoneyUganda.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveMobileMoneyUganda.feeSuccessHandler  = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.mobileMoneyUgandaContentContainer.mobileMoneyUgandaPayButton .setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1605,12 +1605,12 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveMobileMoneyUganda.chargeWebAuth = {[weak self](flwRef, authURL) in
+        raveMobileMoneyUganda.chargeWebAuthHandler  = {[weak self](flwRef, authURL) in
             LoadingHUD.shared().hide()
             self?.showWebView(url: authURL, ref: flwRef)
         }
 
-        raveMobileMoneyUganda.chargePending = {[weak self] (title, message) in
+        raveMobileMoneyUganda.chargePendingHandler = {[weak self] (title, message) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
 
@@ -1618,11 +1618,11 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveMobileMoneyUganda.chargeSuccess = {[weak self](flwRef, data) in
+        raveMobileMoneyUganda.chargeSuccessHandler  = {[weak self](flwRef, data) in
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveMobileMoneyUganda.error = {[weak self](message, data) in
+        raveMobileMoneyUganda.errorHandler  = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {
@@ -1731,7 +1731,7 @@ public class NewRavePayViewController: UITableViewController {
         }
     }
     func mobileMobileCallbacks() {
-        raveMobileMoney.feeSuccess = {[weak self](fee, chargeAmount) in
+        raveMobileMoney.feeSuccessHandler = {[weak self](fee, chargeAmount) in
             if let amount = chargeAmount, amount != "" {
                 DispatchQueue.main.async {
                     self?.mobileMoneyContentView.mobileMoneyPay.setTitle("Pay \(amount.toCountryCurrency(currencyCode: RaveConfig.sharedConfig().currencyCode) )", for: .normal)
@@ -1739,7 +1739,7 @@ public class NewRavePayViewController: UITableViewController {
             }
         }
 
-        raveMobileMoney.chargePending = {[weak self] (title, message) in
+        raveMobileMoney.chargePendingHandler = {[weak self] (title, message) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 let customMessage = RaveConstants.ghsMobileNetworks.filter({ (it) -> Bool in
@@ -1751,11 +1751,11 @@ public class NewRavePayViewController: UITableViewController {
             }
 
         }
-        raveMobileMoney.chargeSuccess = {[weak self](flwRef, data) in
+        raveMobileMoney.chargeSuccessHandler = {[weak self](flwRef, data) in
             self?.delegate?.transactionSuccessful(flwRef: flwRef, responseData: data)
             self?.dismiss(animated: true)
         }
-        raveMobileMoney.error = {[weak self](message, data) in
+        raveMobileMoney.errorHandler = {[weak self](message, data) in
             LoadingHUD.shared().hide()
             DispatchQueue.main.async {
                 if let msg = message {

@@ -211,7 +211,7 @@ public extension Dictionary {
 
     mutating func merge<K, V>(_ dict: [K: V]) {
         for (k, v) in dict {
-            self.updateValue(v as! Value, forKey: k as! Key)
+            self[k as! Key] = v as? Value
         }
     }
 }

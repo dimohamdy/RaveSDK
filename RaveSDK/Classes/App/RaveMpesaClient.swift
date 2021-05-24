@@ -9,63 +9,80 @@
 import Foundation
 import UIKit
 
-public class RaveMpesaClient {
+public typealias FeeSuccessHandler = ((String?, String?) -> Void)
+public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
+
+protocol GetFee {
+    func getFee(param: [String: String], feeSuccessHandler: FeeSuccessHandler?, errorHandler: ErrorHandler?)
+}
+
+extension GetFee {
+
+    func getFee(param: [String: String], feeSuccessHandler: FeeSuccessHandler?, errorHandler: ErrorHandler?) {
+
+        RavePayService.getFee(param, resultCallback: { (result) in
+            if let fee =  result?.data?.fee {
+                let chargeAmount = result?.data?.chargeAmount
+                feeSuccessHandler?("\(fee)", chargeAmount)
+            } else {
+                if let err = result?.message {
+                    errorHandler?(err, nil)
+                }
+            }
+
+        }, errorCallback: { (err) in
+            errorHandler?(err, nil)
+        })
+    }
+}
+
+public class RaveMpesaClient: GetFee {
     public var amount: String?
     public var phoneNumber: String?
     public var email: String? = ""
-    public typealias FeeSuccessHandler = ((String?, String?) -> Void)
+
+    // MARK: Typealias
+
     public typealias PendingHandler = ((String?, String?) -> Void)
-    public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
     public typealias SuccessHandler = ((String?, [String: Any]?) -> Void)
-	public var error: ErrorHandler?
-	public var feeSuccess: FeeSuccessHandler?
-	public var transactionReference: String?
-	public var chargeSuccess: SuccessHandler?
-	public var chargePending: PendingHandler?
+
+    // MARK: Handler
+    public var errorHandler: ErrorHandler?
+    public var feeSuccessHandler: FeeSuccessHandler?
+    public var chargeSuccessHandler: SuccessHandler?
+    public var chargePendingHandler: PendingHandler?
+
+    public var transactionReference: String?
     public var businessNumber: String?
     public var accountNumber: String?
 
-	public init() {}
+    public init() {}
 
     // MARK: Transaction Fee
     public func getFee() {
-        if let pubkey = RaveConfig.sharedConfig().publicKey {
-
-            let param = [
-                "PBFPubKey": pubkey,
-                "amount": amount!,
-                "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
-                "ptype": "3"]
-            RavePayService.getFee(param, resultCallback: { (result) in
-                let data = result?["data"] as? [String: AnyObject]
-                if let _fee =  data?["fee"] as? Double {
-                    let fee = "\(_fee)"
-                    let chargeAmount = data?["charge_amount"] as? String
-                    self.feeSuccess?(fee, chargeAmount)
-                } else {
-                    if let err = result?["message"] as? String {
-                        self.error?(err, nil)
-                    }
-                }
-            }, errorCallback: { (err) in
-
-                self.error?(err, nil)
-            })
-        } else {
-            self.error?("Public Key is not specified", nil)
+        guard let pubkey = RaveConfig.sharedConfig().publicKey else {
+            self.errorHandler?("Public Key is not specified", nil)
+            return
         }
+        let param = [
+            "PBFPubKey": pubkey,
+            "amount": amount!,
+            "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
+            "ptype": "3"]
+           getFee(param: param, feeSuccessHandler: feeSuccessHandler, errorHandler: errorHandler)
+
     }
 
-     // MARK: Charge
+    // MARK: Charge
     public func chargeMpesa() {
         if let pubkey = RaveConfig.sharedConfig().publicKey {
-           var country: String = ""
+            var country: String = ""
             switch RaveConfig.sharedConfig().currencyCode {
             case .KES, .TZS, .GHS, .ZAR:
-                           country = RaveConfig.sharedConfig().country
-                       default:
-                           country = "NG"
-                       }
+                country = RaveConfig.sharedConfig().country
+            default:
+                country = "NG"
+            }
             var param: [String: Any] = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
@@ -130,7 +147,7 @@ public class RaveMpesaClient {
                         if let chargeResponse = result?["chargeResponseCode"] as? String {
                             switch chargeResponse {
                             case "00":
-                                self.chargeSuccess?(flwTransactionRef!, res)
+                                self.chargeSuccessHandler?(flwTransactionRef!, res)
 
                             case "02":
 
@@ -139,12 +156,12 @@ public class RaveMpesaClient {
                                         if let status =  result?["status"] as? String {
                                             if status.containsIgnoringCase(find: "pending") {
 
-                                                    self.chargePending?("Transaction Processing", "A push notification has been sent to your phone, please complete the transaction by entering your pin.\n Please do not close this page until transaction is completed")
-                                                    self.businessNumber =   result?["business_number"] as? String
-                                                    self.accountNumber =  result?["orderRef"] as? String
-                                                    if let txRef = result?["flwRef"] as? String {
-                                                        self.queryMpesaTransaction(txRef: txRef)
-                                                    }
+                                                self.chargePendingHandler?("Transaction Processing", "A push notification has been sent to your phone, please complete the transaction by entering your pin.\n Please do not close this page until transaction is completed")
+                                                self.businessNumber =   result?["business_number"] as? String
+                                                self.accountNumber =  result?["orderRef"] as? String
+                                                if let txRef = result?["flwRef"] as? String {
+                                                    self.queryMpesaTransaction(txRef: txRef)
+                                                }
                                             }
                                         }
                                     }
@@ -155,14 +172,14 @@ public class RaveMpesaClient {
                         }
                     } else {
                         if let message = res?["message"] as? String {
-                           self.error?(message, res)
+                            self.errorHandler?(message, res)
                         }
                     }
                 }
 
             }, errorCallback: { (err) in
 
-                self.error?(err, nil)
+                self.errorHandler?(err, nil)
             })
 
         }
@@ -180,7 +197,7 @@ public class RaveMpesaClient {
                             if let chargeCode = data["chargeResponseCode"] as?  String {
                                 switch chargeCode {
                                 case "00":
-                                    self.chargeSuccess?(flwRef, result)
+                                    self.chargeSuccessHandler?(flwRef, result)
 
                                 default:
                                     self.queryMpesaTransaction(txRef: ref)
@@ -190,15 +207,15 @@ public class RaveMpesaClient {
                             }
                         }
                     } else {
-                            self.error?("Something went wrong please try again.", nil)
+                        self.errorHandler?("Something went wrong please try again.", nil)
                     }
                 }
             }, errorCallback: { (err) in
 
                 if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
-                     self.error?("Request Timed Out", nil)
+                    self.errorHandler?("Request Timed Out", nil)
                 } else {
-                    self.error?(err, nil)
+                    self.errorHandler?(err, nil)
                 }
 
             })

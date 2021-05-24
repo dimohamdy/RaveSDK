@@ -68,25 +68,23 @@ class RavePayService: NSObject {
 			}
 		}
     }
-    class func getFee(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
+
+    class func getFee(_ bodyParam: [String: String], resultCallback:@escaping (_ result: FWResult<Fee>?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
 		let req: URLConvertible = RaveURLHelper.getURL("FEE")
 
-		AF.request(req, method: .post, parameters: bodyParam).responseJSON {
+        AF.request(req, method: .post, parameters: bodyParam).responseDecodable(of: FWResult<Fee>.self) {
 			(res) -> Void in
 
 			switch res.result {
 			case .success(let value):
-				if let json = value as? [String: AnyObject] {
-					print(res.request?.urlRequest ?? "")
-					print(json)
-					resultCallback(json)
-				}
+                resultCallback(value)
 			case .failure(let error):
 				print(error)
 				errorCallback( error.localizedDescription)
 			}
 		}
     }
+
     class func removeSavedCard(_ bodyParam: [String: String], resultCallback:@escaping (_ result: [String: AnyObject]?) -> Void, errorCallback:@escaping (_ err: String) -> Void ) {
 
 		let req: URLConvertible = RaveURLHelper.getURL("REMOVE_SAVEDCARD")

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class RaveAccountClient {
+public class RaveAccountClient: GetFee {
 
     public var amount: String?
     public var accountNumber: String?
@@ -25,23 +25,22 @@ public class RaveAccountClient {
     var txRef: String?
     var chargeAmount: String?
 
-    // MARK: Handlers
-    public var banks: BanksHandler?
-    public var error: ErrorHandler?
-    public var validateError: ErrorHandler?
-    public var feeSuccess: FeeSuccessHandler?
-    public var chargeSuccess: SuccessHandler?
-    public var chargeOTPAuth: OTPAuthHandler?
-    public var redoChargeOTPAuth: OTPAuthHandler?
-    public var chargeGBPOTPAuth: GBPOTPAuthHandler?
-    public var chargeWebAuth: WebAuthHandler?
+    // MARK: Handler
+    public var banksHandler: BanksHandler?
+    public var errorHandler: ErrorHandler?
+    public var validateErrorHandler: ErrorHandler?
+    public var feeSuccessHandler: FeeSuccessHandler?
+    public var chargeSuccessHandler: SuccessHandler?
+    public var chargeOTPAuthHandler: OTPAuthHandler?
+    public var redoChargeOTPAuthHandler: OTPAuthHandler?
+    public var chargeGBPOTPAuthHandler: GBPOTPAuthHandler?
+    public var chargeWebAuthHandler: WebAuthHandler?
 
     // MARK: Typealias
     public typealias BanksHandler = (([Bank]?) -> Void)
     public typealias ErrorHandler = ((String?, [String: Any]?) -> Void)
     public typealias FeeSuccessHandler = ((String?, String?) -> Void)
     public typealias SuccessHandler = ((String?, [String: Any]?) -> Void)
-
     public typealias OTPAuthHandler = ((String, String) -> Void)
     public typealias WebAuthHandler = ((String, String) -> Void)
     public typealias GBPOTPAuthHandler = ((String, String, String) -> Void)
@@ -50,30 +49,18 @@ public class RaveAccountClient {
 
     // MARK: Fee
     public func getFee() {
-        if let pubkey = RaveConfig.sharedConfig().publicKey {
+        guard let pubkey = RaveConfig.sharedConfig().publicKey else {
+            self.errorHandler?("Public Key is not specified", nil)
+return
+        }
             let param = [
                 "PBFPubKey": pubkey,
                 "amount": amount!,
                 "currency": RaveConfig.sharedConfig().currencyCode.rawValue,
                 "ptype": "2"]
-            RavePayService.getFee(param, resultCallback: { (result) in
-                let data = result?["data"] as? [String: AnyObject]
-                if let _fee =  data?["fee"] as? Double {
-                    let fee = "\(_fee)"
-                    let chargeAmount = data?["charge_amount"] as? String
-                    self.feeSuccess?(fee, chargeAmount)
-                } else {
-                    if let err = result?["message"] as? String {
-                        self.error?(err, nil)
-                    }
-                }
-            }, errorCallback: { (err) in
 
-                self.error?(err, nil)
-            })
-        } else {
-            self.error?("Public Key is not specified", nil)
-        }
+        getFee(param: param, feeSuccessHandler: feeSuccessHandler, errorHandler: errorHandler)
+
     }
 
     // MARK: Bank List
@@ -85,7 +72,7 @@ public class RaveAccountClient {
                 }).sorted(by: { (first, second) -> Bool in
                     return first.name!.localizedCaseInsensitiveCompare(second.name!) == .orderedAscending
                 })
-                self.banks?(banks)
+                self.banksHandler?(banks)
             }
         }) { (err) in
             print(err)
@@ -208,13 +195,13 @@ public class RaveAccountClient {
                                 case "00":
                                     let data = result?["data"] as? [String: AnyObject]
                                     if let flwTransactionRef = data?["flw_reference"] as? String {
-                                        self.chargeSuccess?(flwTransactionRef, result)
+                                        self.chargeSuccessHandler?(flwTransactionRef, result)
                                     }
                                 case "02":
                                     let data = result?["data"] as? [String: AnyObject]
                                     let paymentCode = data?["payment_code"] as? String
                                     if let flwTransactionRef = data?["flw_reference"] as? String {
-                                        self.chargeGBPOTPAuth?(flwTransactionRef, paymentCode ?? "", "")
+                                        self.chargeGBPOTPAuthHandler?(flwTransactionRef, paymentCode ?? "", "")
                                         self.txRef = flwTransactionRef
                                     }
                                 default:
@@ -227,7 +214,7 @@ public class RaveAccountClient {
                                 case "00":
 
                                     if let flwTransactionRef = result?["flwRef"] as? String {
-                                        self.chargeSuccess?(flwTransactionRef, result)
+                                        self.chargeSuccessHandler?(flwTransactionRef, result)
                                     }
 
                                 case "02":
@@ -246,10 +233,10 @@ public class RaveAccountClient {
                                         }
                                     }
                                     if let authURL = result?["authurl"] as? String, authURL != "NO-URL", authURL != "N/A"{
-                                        self.chargeWebAuth?(flwTransactionRef!, authURL)
+                                        self.chargeWebAuthHandler?(flwTransactionRef!, authURL)
                                     } else {
                                         if let flwRef = flwTransactionRef {
-                                            self.chargeOTPAuth?(flwRef, _instruction ?? "Pending OTP Validation")
+                                            self.chargeOTPAuthHandler?(flwRef, _instruction ?? "Pending OTP Validation")
                                         }
                                     }
                                 default:
@@ -260,7 +247,7 @@ public class RaveAccountClient {
                     } else {
                         if let message = res?["message"] as? String {
 
-                            self.error?(message, res)
+                            self.errorHandler?(message, res)
 
                         }
                     }
@@ -268,7 +255,7 @@ public class RaveAccountClient {
 
             }, errorCallback: { (err) in
 
-                self.error?(err, nil)
+                self.errorHandler?(err, nil)
             })
 
         }
@@ -277,7 +264,7 @@ public class RaveAccountClient {
     // MARK: Validate OTP
     public func validateAccountOTP() {
         guard let ref = self.transactionReference, let _otp = otp else {
-            self.error?("Transaction Reference  or OTP is not set", nil)
+            self.errorHandler?("Transaction Reference  or OTP is not set", nil)
             return
         }
         let reqbody = [
@@ -294,18 +281,18 @@ public class RaveAccountClient {
                                 if let dataStatus = data["status"] as? String {
                                     if dataStatus.containsIgnoringCase(find: "failed") {
                                         if let message = data["acctvalrespmsg"] as? String {
-                                            self.validateError?(message, data)
+                                            self.validateErrorHandler?(message, data)
                                         }
                                     } else {
                                         let message = data["chargeResponseMessage"] as? String
-                                        self.redoChargeOTPAuth?(flwRef, message ?? "Pending OTP Validation")
+                                        self.redoChargeOTPAuthHandler?(flwRef, message ?? "Pending OTP Validation")
                                     }
                                 } else {
                                     let message = data["chargeResponseMessage"] as? String
-                                    self.redoChargeOTPAuth?(flwRef, message ?? "Pending OTP Validation")
+                                    self.redoChargeOTPAuthHandler?(flwRef, message ?? "Pending OTP Validation")
                                 }
                             } else {
-                                self.chargeSuccess?(flwRef, result)
+                                self.chargeSuccessHandler?(flwRef, result)
 
                             }
                         }
@@ -313,14 +300,14 @@ public class RaveAccountClient {
                     }
                 } else {
                     let message = res ["message"] as? String
-                    self.validateError?(message, res)
+                    self.validateErrorHandler?(message, res)
                 }
             }
         }) { (err) in
             if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
-                self.validateError?("Request Timed Out", nil)
+                self.validateErrorHandler?("Request Timed Out", nil)
             } else {
-                self.validateError?(err, nil)
+                self.validateErrorHandler?(err, nil)
             }
         }
     }
@@ -336,7 +323,7 @@ public class RaveAccountClient {
                             if let chargeCode = data["chargeResponseCode"] as?  String {
                                 switch chargeCode {
                                 case "00":
-                                    self.chargeSuccess?(flwRef, result)
+                                    self.chargeSuccessHandler?(flwRef, result)
 
                                 default:
                                     self.queryTransaction(txRef: ref)
@@ -346,15 +333,15 @@ public class RaveAccountClient {
                             }
                         }
                     } else {
-                        self.error?("Something went wrong please try again.", nil)
+                        self.errorHandler?("Something went wrong please try again.", nil)
                     }
                 }
             }, errorCallback: { (err) in
 
                 if err.containsIgnoringCase(find: "serialize") || err.containsIgnoringCase(find: "JSON") {
-                    self.error?("Request Timed Out", nil)
+                    self.errorHandler?("Request Timed Out", nil)
                 } else {
-                    self.error?(err, nil)
+                    self.errorHandler?(err, nil)
                 }
 
             })

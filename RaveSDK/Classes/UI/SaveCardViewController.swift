@@ -36,14 +36,14 @@ class SaveCardViewController: UIViewController {
         saveCardTable.rowHeight = 74
         saveCardTable.register(SaveCardCell.self, forCellReuseIdentifier: "saveCard")
 
-        raveCardClient.removesavedCardSuccess = { [weak self] in
+        raveCardClient.removesavedCardSuccessHandler = { [weak self] in
             DispatchQueue.main.async {
 
                 self?.saveCardTable.reloadData()
             }
         }
 
-        raveCardClient.removesavedCardError = { message in
+        raveCardClient.removesavedCardErrorHandler = { message in
 
             showSnackBarWithMessage(msg: message ?? "An error occured deleting saved card")
         }
